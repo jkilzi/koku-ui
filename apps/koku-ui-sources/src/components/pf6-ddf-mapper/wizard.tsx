@@ -37,18 +37,12 @@ const PF6WizardRenderer: React.FC<any> = () => {
       <div style={{ marginBottom: '24px' }}>
         <h2>{currentStep.title || currentStep.name}</h2>
       </div>
-      <div style={{ marginBottom: '24px' }}>
-        {currentStep.fields && formOptions.renderForm(currentStep.fields)}
-      </div>
+      <div style={{ marginBottom: '24px' }}>{currentStep.fields && formOptions.renderForm(currentStep.fields)}</div>
       <footer style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end', paddingTop: '16px' }}>
         <Button variant={ButtonVariant.secondary} onClick={handlePrev} isDisabled={activeStepIndex === 0}>
           Back
         </Button>
-        <Button
-          variant={ButtonVariant.primary}
-          onClick={onNext}
-          isDisabled={isNextDisabled}
-        >
+        <Button variant={ButtonVariant.primary} onClick={onNext} isDisabled={isNextDisabled}>
           {isLastStep || isSubmitStep ? 'Submit' : 'Next'}
         </Button>
         <Button variant={ButtonVariant.link} onClick={formOptions.onCancel}>
@@ -59,7 +53,7 @@ const PF6WizardRenderer: React.FC<any> = () => {
   );
 };
 
-const WizardMapper: React.FC<any> = (props) => {
+const WizardMapper: React.FC<any> = props => {
   return <Wizard Wizard={PF6WizardRenderer} {...props} />;
 };
 

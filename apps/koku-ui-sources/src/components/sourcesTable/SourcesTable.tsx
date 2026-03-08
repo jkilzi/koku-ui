@@ -1,19 +1,9 @@
-import {
-  ActionsColumn,
-  Table,
-  TableVariant,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from '@patternfly/react-table';
+import { ActionsColumn, Table, TableVariant, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { getSourceTypeById } from 'api/sourceTypes';
+import messages from 'locales/messages';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import type { Source } from 'typings/source';
-
-import messages from '../../locales/messages';
 
 interface SourcesTableProps {
   sources: Source[];
@@ -47,7 +37,7 @@ const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource, on
           <Th>{intl.formatMessage(messages.sourceType)}</Th>
           <Th>{intl.formatMessage(messages.dateAdded)}</Th>
           <Th>{intl.formatMessage(messages.status)}</Th>
-          <Th />
+          <Th screenReaderText="Actions" />
         </Tr>
       </Thead>
       <Tbody>
@@ -59,9 +49,7 @@ const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource, on
               <Td dataLabel={intl.formatMessage(messages.sourceType)}>
                 {sourceType?.product_name ?? source.source_type}
               </Td>
-              <Td dataLabel={intl.formatMessage(messages.dateAdded)}>
-                {formatDate(source.created_timestamp)}
-              </Td>
+              <Td dataLabel={intl.formatMessage(messages.dateAdded)}>{formatDate(source.created_timestamp)}</Td>
               <Td dataLabel={intl.formatMessage(messages.status)}>{formatStatus(source)}</Td>
               <Td isActionCell onClick={e => e.stopPropagation()}>
                 <ActionsColumn

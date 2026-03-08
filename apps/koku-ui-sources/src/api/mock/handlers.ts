@@ -1,6 +1,5 @@
-import { http, HttpResponse } from 'msw';
-
 import { APPLICATIONS_PATH, SOURCES_PATH } from 'api/constants';
+import { http, HttpResponse } from 'msw';
 
 import { mockSources } from './data/sources';
 

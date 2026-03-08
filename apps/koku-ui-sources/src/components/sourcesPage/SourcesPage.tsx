@@ -1,26 +1,24 @@
 import { Bullseye, PageSection, Spinner } from '@patternfly/react-core';
+import { AddSourceWizard } from 'components/add-source-wizard/AddSourceWizard';
+import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
+import { SourceRenameModal } from 'components/modals/SourceRenameModal';
+import { SourceDetail } from 'components/sourceDetail/SourceDetail';
+import { SourcesTable } from 'components/sourcesTable/SourcesTable';
+import { SourcesToolbar } from 'components/sourcesTable/SourcesToolbar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import type { AppDispatch, RootState } from 'redux/store';
 import { loadEntities, setFilter, setPage } from 'redux/sources/sourcesSlice';
+import type { AppDispatch, RootState } from 'redux/store';
+import { sourcesRoutes } from 'routes';
 import type { Source, SourceType } from 'typings/source';
 
-import { sourcesRoutes } from '../../routes';
-import { AddSourceWizard } from '../add-source-wizard/AddSourceWizard';
-import { SourceDetail } from '../sourceDetail/SourceDetail';
-import { SourceRemoveModal } from '../modals/SourceRemoveModal';
-import { SourceRenameModal } from '../modals/SourceRenameModal';
-import { SourcesTable } from '../sourcesTable/SourcesTable';
-import { SourcesToolbar } from '../sourcesTable/SourcesToolbar';
 import { SourcesEmptyState } from './SourcesEmptyState';
 
 const SourcesPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { entities, count, loading, filterValue, page, perPage } = useSelector(
-    (state: RootState) => state.sources
-  );
+  const { entities, count, loading, filterValue, page, perPage } = useSelector((state: RootState) => state.sources);
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [preselectedType, setPreselectedType] = useState<string | undefined>();
   const [renameSource, setRenameSource] = useState<Source | null>(null);

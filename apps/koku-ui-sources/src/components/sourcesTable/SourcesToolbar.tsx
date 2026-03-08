@@ -7,10 +7,9 @@ import {
   ToolbarGroup,
   ToolbarItem,
 } from '@patternfly/react-core';
+import messages from 'locales/messages';
 import React, { useCallback, useState } from 'react';
 import { useIntl } from 'react-intl';
-
-import messages from '../../locales/messages';
 
 interface SourcesToolbarProps {
   count: number;

@@ -1,10 +1,9 @@
 import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@patternfly/react-core';
 import { deleteSource } from 'api/entities';
+import messages from 'locales/messages';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 import type { Source } from 'typings/source';
-
-import messages from '../../locales/messages';
 
 interface SourceRemoveModalProps {
   isOpen: boolean;
@@ -37,10 +36,7 @@ const SourceRemoveModal: React.FC<SourceRemoveModalProps> = ({ isOpen, source, o
       <ModalHeader title={intl.formatMessage(messages.remove)} />
       <ModalBody>
         {error && <Alert variant="danger" title={error} isInline style={{ marginBottom: '16px' }} />}
-        <FormattedMessage
-          {...messages.removeConfirmation}
-          values={{ name: <strong>{source.name}</strong> }}
-        />
+        <FormattedMessage {...messages.removeConfirmation} values={{ name: <strong>{source.name}</strong> }} />
       </ModalBody>
       <ModalFooter>
         <Button variant="danger" onClick={handleDelete} isLoading={isDeleting} isDisabled={isDeleting}>

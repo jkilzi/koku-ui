@@ -1,11 +1,11 @@
 import { EmptyState, EmptyStateBody, Gallery, GalleryItem } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { SOURCE_TYPES } from 'api/sourceTypes';
+import messages from 'locales/messages';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import type { SourceType } from 'typings/source';
 
-import messages from '../../locales/messages';
 import { SourceTypeTile } from './SourceTypeTile';
 
 interface SourcesEmptyStateProps {

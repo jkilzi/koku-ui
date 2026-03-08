@@ -1,9 +1,9 @@
 import FormRenderer from '@data-driven-forms/react-form-renderer/form-renderer';
 import { Alert, Modal, ModalBody, ModalHeader } from '@patternfly/react-core';
 import { createApplication, createSource, deleteSource } from 'api/entities';
+import componentMapper from 'components/pf6-ddf-mapper';
 import React, { useCallback, useState } from 'react';
 
-import componentMapper from '../pf6-ddf-mapper';
 import { buildWizardSchema } from './schemaBuilder';
 
 interface AddSourceWizardProps {
@@ -17,12 +17,7 @@ const FormTemplate: React.FC<any> = ({ formFields }) => {
   return <>{formFields}</>;
 };
 
-const AddSourceWizard: React.FC<AddSourceWizardProps> = ({
-  isOpen,
-  onClose,
-  onSubmitSuccess,
-  preselectedType,
-}) => {
+const AddSourceWizard: React.FC<AddSourceWizardProps> = ({ isOpen, onClose, onSubmitSuccess, preselectedType }) => {
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = useCallback(

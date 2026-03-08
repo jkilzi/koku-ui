@@ -1,10 +1,18 @@
-import { Alert, Button, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, TextInput } from '@patternfly/react-core';
+import {
+  Alert,
+  Button,
+  FormGroup,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  TextInput,
+} from '@patternfly/react-core';
 import { updateSource } from 'api/entities';
+import messages from 'locales/messages';
 import React, { useCallback, useState } from 'react';
 import { useIntl } from 'react-intl';
 import type { Source } from 'typings/source';
-
-import messages from '../../locales/messages';
 
 interface SourceRenameModalProps {
   isOpen: boolean;
@@ -20,7 +28,9 @@ const SourceRenameModal: React.FC<SourceRenameModalProps> = ({ isOpen, source, o
   const [error, setError] = useState<string | null>(null);
 
   const handleSave = useCallback(async () => {
-    if (!newName.trim()) return;
+    if (!newName.trim()) {
+      return;
+    }
     setIsSaving(true);
     setError(null);
     try {
@@ -39,12 +49,7 @@ const SourceRenameModal: React.FC<SourceRenameModalProps> = ({ isOpen, source, o
       <ModalBody>
         {error && <Alert variant="danger" title={error} isInline style={{ marginBottom: '16px' }} />}
         <FormGroup label={intl.formatMessage(messages.name)} isRequired fieldId="source-rename">
-          <TextInput
-            id="source-rename"
-            value={newName}
-            onChange={(_event, value) => setNewName(value)}
-            isRequired
-          />
+          <TextInput id="source-rename" value={newName} onChange={(_event, value) => setNewName(value)} isRequired />
         </FormGroup>
       </ModalBody>
       <ModalFooter>

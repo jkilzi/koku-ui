@@ -1,0 +1,110 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { IntlProvider } from 'react-intl';
+import { SourcesTable } from './SourcesTable';
+import type { Source } from 'typings/source';
+
+beforeEach(() => {
+  jest.useRealTimers();
+});
+
+const mockSources: Source[] = [
+  {
+    id: 1,
+    uuid: 'uuid-1',
+    name: 'My OCP Source',
+    source_type: 'OCP',
+    authentication: {},
+    billing_source: null,
+    provider_linked: false,
+    active: true,
+    paused: false,
+    current_month_data: false,
+    previous_month_data: false,
+    has_data: false,
+    created_timestamp: '2026-01-15T10:00:00Z',
+  },
+  {
+    id: 2,
+    uuid: 'uuid-2',
+    name: 'AWS Source',
+    source_type: 'AWS',
+    authentication: {},
+    billing_source: null,
+    provider_linked: false,
+    active: false,
+    paused: true,
+    current_month_data: false,
+    previous_month_data: false,
+    has_data: false,
+    created_timestamp: '2026-01-10T08:00:00Z',
+  },
+];
+
+const renderWithIntl = (sources: Source[], props: Partial<Parameters<typeof SourcesTable>[0]> = {}) => {
+  const defaultProps = {
+    sources,
+    onSelectSource: jest.fn(),
+    onRename: jest.fn(),
+    onRemove: jest.fn(),
+  };
+  return render(
+    <IntlProvider locale="en" defaultLocale="en">
+      <SourcesTable {...defaultProps} {...props} />
+    </IntlProvider>
+  );
+};
+
+describe('SourcesTable', () => {
+  it('renders table headers (Name, Type, Date added, Status)', () => {
+    renderWithIntl([]);
+
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Type')).toBeInTheDocument();
+    expect(screen.getByText('Date added')).toBeInTheDocument();
+    expect(screen.getByText('Status')).toBeInTheDocument();
+  });
+
+  it('renders source rows with correct data', () => {
+    renderWithIntl(mockSources);
+
+    expect(screen.getByText('My OCP Source')).toBeInTheDocument();
+    expect(screen.getByText('OpenShift Container Platform')).toBeInTheDocument();
+    expect(screen.getByText('Available')).toBeInTheDocument();
+
+    expect(screen.getByText('AWS Source')).toBeInTheDocument();
+    expect(screen.getByText('Amazon Web Services')).toBeInTheDocument();
+    expect(screen.getByText('Paused')).toBeInTheDocument();
+  });
+
+  it('calls onSelectSource when row is clicked', async () => {
+    const user = userEvent.setup();
+    const onSelectSource = jest.fn();
+    renderWithIntl(mockSources, { onSelectSource });
+
+    await user.click(screen.getByText('My OCP Source'));
+
+    expect(onSelectSource).toHaveBeenCalledWith(mockSources[0]);
+  });
+
+  it('renders actions kebab menu', async () => {
+    const user = userEvent.setup();
+    const onSelectSource = jest.fn();
+    const onRename = jest.fn();
+    const onRemove = jest.fn();
+    renderWithIntl(mockSources, {
+      onSelectSource,
+      onRename,
+      onRemove,
+    });
+
+    const kebabButtons = screen.getAllByRole('button');
+    expect(kebabButtons.length).toBeGreaterThan(0);
+
+    await user.click(kebabButtons[0]);
+
+    expect(screen.getByText('View details')).toBeInTheDocument();
+    expect(screen.getByText('Rename')).toBeInTheDocument();
+    expect(screen.getByText('Remove')).toBeInTheDocument();
+  });
+});

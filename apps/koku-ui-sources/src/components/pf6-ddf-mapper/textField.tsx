@@ -1,12 +1,12 @@
-import { FormGroup, TextInput } from '@patternfly/react-core';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
+import { FormGroup, TextInput } from '@patternfly/react-core';
 import React from 'react';
 
-const TextField: React.FC<any> = (props) => {
+const TextField: React.FC<any> = props => {
   const { input, meta, label, isRequired, helperText, description, isDisabled, placeholder } = useFieldApi(props);
   const isError = meta.touched && meta.error;
   const { type, ...inputRest } = input;
-  const helpText = !isError ? (helperText || description) : undefined;
+  const helpText = !isError ? helperText || description : undefined;
 
   return (
     <FormGroup label={label} isRequired={isRequired} fieldId={input.name}>

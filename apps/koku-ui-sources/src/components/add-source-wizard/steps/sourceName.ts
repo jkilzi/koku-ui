@@ -12,10 +12,7 @@ export const sourceNameStep = {
       label: 'Name',
       placeholder: 'Enter a name for this source',
       isRequired: true,
-      validate: [
-        { type: validatorTypes.REQUIRED },
-        { type: validatorTypes.MIN_LENGTH, threshold: 1 },
-      ],
+      validate: [{ type: validatorTypes.REQUIRED }, { type: validatorTypes.MIN_LENGTH, threshold: 1 }],
     },
   ],
 };

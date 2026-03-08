@@ -1,8 +1,8 @@
-import { FormGroup, TextArea as PFTextArea } from '@patternfly/react-core';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
+import { FormGroup, TextArea as PFTextArea } from '@patternfly/react-core';
 import React from 'react';
 
-const TextArea: React.FC<any> = (props) => {
+const TextArea: React.FC<any> = props => {
   const { input, meta, label, isRequired, isDisabled, placeholder } = useFieldApi(props);
   const isError = meta.touched && meta.error;
 

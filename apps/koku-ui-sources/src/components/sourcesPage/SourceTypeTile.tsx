@@ -1,6 +1,5 @@
 import { Card, CardBody, CardTitle } from '@patternfly/react-core';
 import React from 'react';
-
 import type { SourceType } from 'typings/source';
 
 interface SourceTypeTileProps {

@@ -3,8 +3,8 @@ import {
   ActionListItem,
   Breadcrumb,
   BreadcrumbItem,
-  Button,
   Bullseye,
+  Button,
   DescriptionList,
   DescriptionListDescription,
   DescriptionListGroup,
@@ -16,14 +16,13 @@ import {
 } from '@patternfly/react-core';
 import { getSource } from 'api/entities';
 import { getSourceTypeById } from 'api/sourceTypes';
+import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
+import { SourceRenameModal } from 'components/modals/SourceRenameModal';
+import messages from 'locales/messages';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { Source } from 'typings/source';
-
-import messages from '../../locales/messages';
-import { SourceRemoveModal } from '../modals/SourceRemoveModal';
-import { SourceRenameModal } from '../modals/SourceRenameModal';
 
 const SourceDetail: React.FC = () => {
   const intl = useIntl();
@@ -35,7 +34,9 @@ const SourceDetail: React.FC = () => {
   const [isRenameOpen, setIsRenameOpen] = useState(false);
 
   const fetchSource = useCallback(async () => {
-    if (!uuid) return;
+    if (!uuid) {
+      return;
+    }
     setLoading(true);
     try {
       const data = await getSource(uuid);
@@ -134,9 +135,7 @@ const SourceDetail: React.FC = () => {
           {source.authentication?.credentials?.cluster_id && (
             <DescriptionListGroup>
               <DescriptionListTerm>Cluster ID</DescriptionListTerm>
-              <DescriptionListDescription>
-                {source.authentication.credentials.cluster_id}
-              </DescriptionListDescription>
+              <DescriptionListDescription>{source.authentication.credentials.cluster_id}</DescriptionListDescription>
             </DescriptionListGroup>
           )}
           {source.billing_source?.data_source?.bucket && (

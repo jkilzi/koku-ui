@@ -1,12 +1,12 @@
 import UiVersion from '@koku-ui/ui-lib/components/page/uiVersion';
+import { ErrorBoundary } from 'components/ErrorBoundary';
 import { getLocale, ignoreDefaultMessageError } from 'components/i18n';
+import { SourcesPage } from 'components/sourcesPage/SourcesPage';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { sourcesStore } from 'redux/store';
-
-import { SourcesPage } from '../components/sourcesPage/SourcesPage';
 
 // eslint-disable-next-line no-restricted-imports
 import messages from '../../locales/data.json';
@@ -23,9 +23,11 @@ const SourcesPageWrapper: React.FC = () => {
       onError={ignoreDefaultMessageError}
     >
       <Provider store={sourcesStore as any}>
-        <MemoryRouter>
-          <SourcesPage />
-        </MemoryRouter>
+        <ErrorBoundary>
+          <MemoryRouter>
+            <SourcesPage />
+          </MemoryRouter>
+        </ErrorBoundary>
         <UiVersion />
       </Provider>
     </IntlProvider>

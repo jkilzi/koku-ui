@@ -1,8 +1,8 @@
-import { FormGroup, MenuToggle, Select as PFSelect, SelectList, SelectOption } from '@patternfly/react-core';
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
+import { FormGroup, MenuToggle, Select as PFSelect, SelectList, SelectOption } from '@patternfly/react-core';
 import React, { useState } from 'react';
 
-const Select: React.FC<any> = (props) => {
+const Select: React.FC<any> = props => {
   const { input, meta, label, isRequired, options = [], isDisabled, placeholder } = useFieldApi(props);
   const [isOpen, setIsOpen] = useState(false);
   const isError = meta.touched && meta.error;
@@ -20,7 +20,7 @@ const Select: React.FC<any> = (props) => {
           setIsOpen(false);
         }}
         selected={input.value}
-        toggle={(toggleRef) => (
+        toggle={toggleRef => (
           <MenuToggle
             ref={toggleRef}
             onClick={() => setIsOpen(prev => !prev)}

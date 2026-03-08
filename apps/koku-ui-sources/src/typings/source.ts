@@ -5,7 +5,7 @@ export interface Source {
   source_type: string;
   authentication: Record<string, any>;
   billing_source: Record<string, any> | null;
-  cost_models?: Array<{ name: string; uuid: string }>;
+  cost_models?: { name: string; uuid: string }[];
   infrastructure?: { uuid: string; type: string; name: string };
   provider_linked: boolean;
   active: boolean;

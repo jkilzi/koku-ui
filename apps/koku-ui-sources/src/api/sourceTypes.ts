@@ -30,8 +30,6 @@ export const SOURCE_TYPE_GCP: SourceType = {
 
 export const SOURCE_TYPES = [SOURCE_TYPE_OCP, SOURCE_TYPE_AWS, SOURCE_TYPE_AZURE, SOURCE_TYPE_GCP] as const;
 
-export const getSourceTypeById = (id: string): SourceType | undefined =>
-  SOURCE_TYPES.find(st => st.id === id);
+export const getSourceTypeById = (id: string): SourceType | undefined => SOURCE_TYPES.find(st => st.id === id);
 
-export const getSourceTypeByName = (name: string): SourceType | undefined =>
-  SOURCE_TYPES.find(st => st.name === name);
+export const getSourceTypeByName = (name: string): SourceType | undefined => SOURCE_TYPES.find(st => st.name === name);
