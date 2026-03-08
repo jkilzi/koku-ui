@@ -1,3 +1,4 @@
+import { ScalprumComponent } from '@scalprum/react-core';
 import { PageSection, Tab, TabContent, Tabs, TabTitleText, Title, TitleSizes } from '@patternfly/react-core';
 import { getUserAccessQuery } from 'api/queries/userAccessQuery';
 import type { UserAccess } from 'api/userAccess';
@@ -32,6 +33,7 @@ const enum SettingsTab {
   costCategory = 'cost_category',
   platformProjects = 'platform_projects',
   tags = 'tags',
+  sources = 'sources',
 }
 
 export const getIdKeyForTab = (tab: SettingsTab) => {
@@ -46,6 +48,8 @@ export const getIdKeyForTab = (tab: SettingsTab) => {
       return 'platform_projects';
     case SettingsTab.tags:
       return 'tags';
+    case SettingsTab.sources:
+      return 'sources';
   }
 };
 
@@ -107,6 +111,10 @@ const Settings: React.FC<SettingsProps> = () => {
         contentRef: React.createRef(),
         tab: SettingsTab.platformProjects,
       },
+      {
+        contentRef: React.createRef(),
+        tab: SettingsTab.sources,
+      },
     ];
     return availableTabs;
   };
@@ -161,6 +169,14 @@ const Settings: React.FC<SettingsProps> = () => {
       return hasSettingsAccess(userAccess) ? <PlatformProjects canWrite={canWrite()} /> : notAuthorized;
     } else if (currentTab === SettingsTab.tags) {
       return hasSettingsAccess(userAccess) ? <TagLabels canWrite={canWrite()} /> : notAuthorized;
+    } else if (currentTab === SettingsTab.sources) {
+      return (
+        <ScalprumComponent
+          scope="sources"
+          module="./SourcesPage"
+          fallback={<LoadingState />}
+        />
+      );
     } else {
       return emptyTab;
     }
@@ -185,6 +201,8 @@ const Settings: React.FC<SettingsProps> = () => {
       return intl.formatMessage(messages.platformProjectsTitle);
     } else if (tab === SettingsTab.tags) {
       return intl.formatMessage(messages.tagLabelsTitle);
+    } else if (tab === SettingsTab.sources) {
+      return 'Sources';
     }
   };
 
