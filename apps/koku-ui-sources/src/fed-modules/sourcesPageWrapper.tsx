@@ -2,6 +2,7 @@ import UiVersion from '@koku-ui/ui-lib/components/page/uiVersion';
 import { getLocale, ignoreDefaultMessageError } from 'components/i18n';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { sourcesStore } from 'redux/store';
 
@@ -22,7 +23,9 @@ const SourcesPageWrapper: React.FC = () => {
       onError={ignoreDefaultMessageError}
     >
       <Provider store={sourcesStore as any}>
-        <SourcesPage />
+        <MemoryRouter>
+          <SourcesPage />
+        </MemoryRouter>
         <UiVersion />
       </Provider>
     </IntlProvider>

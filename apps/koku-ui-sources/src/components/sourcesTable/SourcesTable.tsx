@@ -1,4 +1,13 @@
-import { Table, TableVariant, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
+import {
+  ActionsColumn,
+  Table,
+  TableVariant,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@patternfly/react-table';
 import { getSourceTypeById } from 'api/sourceTypes';
 import React from 'react';
 import { useIntl } from 'react-intl';
@@ -9,6 +18,8 @@ import messages from '../../locales/messages';
 interface SourcesTableProps {
   sources: Source[];
   onSelectSource: (source: Source) => void;
+  onRename: (source: Source) => void;
+  onRemove: (source: Source) => void;
 }
 
 const formatDate = (dateStr?: string) => {
@@ -25,7 +36,7 @@ const formatStatus = (source: Source): string => {
   return source.active ? 'Available' : 'Unavailable';
 };
 
-const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource }) => {
+const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource, onRename, onRemove }) => {
   const intl = useIntl();
 
   return (
@@ -36,6 +47,7 @@ const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource }) 
           <Th>{intl.formatMessage(messages.sourceType)}</Th>
           <Th>{intl.formatMessage(messages.dateAdded)}</Th>
           <Th>{intl.formatMessage(messages.status)}</Th>
+          <Th />
         </Tr>
       </Thead>
       <Tbody>
@@ -51,6 +63,25 @@ const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource }) 
                 {formatDate(source.created_timestamp)}
               </Td>
               <Td dataLabel={intl.formatMessage(messages.status)}>{formatStatus(source)}</Td>
+              <Td isActionCell onClick={e => e.stopPropagation()}>
+                <ActionsColumn
+                  items={[
+                    {
+                      title: intl.formatMessage(messages.viewDetails),
+                      onClick: () => onSelectSource(source),
+                    },
+                    {
+                      title: intl.formatMessage(messages.rename),
+                      onClick: () => onRename(source),
+                    },
+                    {
+                      title: intl.formatMessage(messages.remove),
+                      onClick: () => onRemove(source),
+                      isDanger: true,
+                    },
+                  ]}
+                />
+              </Td>
             </Tr>
           );
         })}

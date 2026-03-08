@@ -57,4 +57,24 @@ export default defineMessages({
     id: 'sources.tabTitle',
     defaultMessage: 'Sources',
   },
+  rename: {
+    id: 'sources.rename',
+    defaultMessage: 'Rename',
+  },
+  remove: {
+    id: 'sources.remove',
+    defaultMessage: 'Remove',
+  },
+  viewDetails: {
+    id: 'sources.viewDetails',
+    defaultMessage: 'View details',
+  },
+  sourceNotFound: {
+    id: 'sources.sourceNotFound',
+    defaultMessage: 'Source not found',
+  },
+  removeConfirmation: {
+    id: 'sources.removeConfirmation',
+    defaultMessage: 'Are you sure you want to remove {name}? This action cannot be undone.',
+  },
 });
