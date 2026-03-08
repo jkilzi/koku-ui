@@ -1,0 +1,18 @@
+{
+  "en": {
+    "sources.addSource": "Add source",
+    "sources.emptyStateTitle": "No sources",
+    "sources.emptyStateBody": "Add a source to get started with cost management.",
+    "sources.filterByName": "Filter by name",
+    "sources.filterByType": "Filter by type",
+    "sources.filterByStatus": "Filter by status",
+    "sources.name": "Name",
+    "sources.sourceType": "Type",
+    "sources.dateAdded": "Date added",
+    "sources.status": "Status",
+    "sources.statusAvailable": "Available",
+    "sources.statusUnavailable": "Unavailable",
+    "sources.statusPartiallyAvailable": "Partially available",
+    "sources.tabTitle": "Sources"
+  }
+}
