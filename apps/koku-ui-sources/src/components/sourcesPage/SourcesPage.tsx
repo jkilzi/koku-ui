@@ -7,18 +7,18 @@ import { SourcesTable } from 'components/sourcesTable/SourcesTable';
 import { SourcesToolbar } from 'components/sourcesTable/SourcesToolbar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useNavigate } from 'react-router-dom';
 import { loadEntities, setFilter, setPage } from 'redux/sources/sourcesSlice';
 import type { AppDispatch, RootState } from 'redux/store';
-import { sourcesRoutes } from 'routes';
 import type { Source, SourceType } from 'typings/source';
 
 import { SourcesEmptyState } from './SourcesEmptyState';
 
+type ViewState = { type: 'list' } | { type: 'detail'; uuid: string };
+
 const SourcesPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const { entities, count, loading, filterValue, page, perPage } = useSelector((state: RootState) => state.sources);
+  const [currentView, setCurrentView] = useState<ViewState>({ type: 'list' });
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [preselectedType, setPreselectedType] = useState<string | undefined>();
   const [renameSource, setRenameSource] = useState<Source | null>(null);
@@ -63,12 +63,9 @@ const SourcesPage: React.FC = () => {
     dispatch(loadEntities());
   }, [dispatch]);
 
-  const handleSelectSource = useCallback(
-    (source: Source) => {
-      navigate(`${sourcesRoutes.detail.replace(':uuid', source.uuid)}`);
-    },
-    [navigate]
-  );
+  const handleSelectSource = useCallback((source: Source) => {
+    setCurrentView({ type: 'detail', uuid: source.uuid });
+  }, []);
 
   const handleRename = useCallback((source: Source) => {
     setRenameSource(source);
@@ -86,8 +83,8 @@ const SourcesPage: React.FC = () => {
   const handleRemoveSuccess = useCallback(() => {
     dispatch(loadEntities());
     setRemoveSource(null);
-    navigate('/');
-  }, [dispatch, navigate]);
+    setCurrentView({ type: 'list' });
+  }, [dispatch]);
 
   const renderListContent = () => {
     if (loading && entities.length === 0) {
@@ -129,10 +126,11 @@ const SourcesPage: React.FC = () => {
 
   return (
     <>
-      <Routes>
-        <Route path={sourcesRoutes.detail} element={<SourceDetail />} />
-        <Route path={sourcesRoutes.list} element={renderListContent()} />
-      </Routes>
+      {currentView.type === 'detail' ? (
+        <SourceDetail uuid={currentView.uuid} onBack={() => setCurrentView({ type: 'list' })} />
+      ) : (
+        renderListContent()
+      )}
       <AddSourceWizard
         isOpen={isWizardOpen}
         onClose={handleWizardClose}

@@ -21,13 +21,15 @@ import { SourceRenameModal } from 'components/modals/SourceRenameModal';
 import messages from 'locales/messages';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useNavigate, useParams } from 'react-router-dom';
 import type { Source } from 'typings/source';
 
-const SourceDetail: React.FC = () => {
+interface SourceDetailProps {
+  uuid: string;
+  onBack: () => void;
+}
+
+const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
   const intl = useIntl();
-  const { uuid } = useParams<{ uuid: string }>();
-  const navigate = useNavigate();
   const [source, setSource] = useState<Source | null>(null);
   const [loading, setLoading] = useState(true);
   const [isRemoveOpen, setIsRemoveOpen] = useState(false);
@@ -53,8 +55,8 @@ const SourceDetail: React.FC = () => {
   }, [fetchSource]);
 
   const handleRemoveSuccess = useCallback(() => {
-    navigate('/');
-  }, [navigate]);
+    onBack();
+  }, [onBack]);
 
   const handleRenameSuccess = useCallback(() => {
     fetchSource();
@@ -91,7 +93,7 @@ const SourceDetail: React.FC = () => {
             to="#"
             onClick={e => {
               e.preventDefault();
-              navigate('/');
+              onBack();
             }}
           >
             {intl.formatMessage(messages.sourcesTabTitle)}

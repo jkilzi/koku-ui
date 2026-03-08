@@ -5,7 +5,6 @@ import { SourcesPage } from 'components/sourcesPage/SourcesPage';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import { sourcesStore } from 'redux/store';
 
 // eslint-disable-next-line no-restricted-imports
@@ -24,9 +23,7 @@ const SourcesPageWrapper: React.FC = () => {
     >
       <Provider store={sourcesStore as any}>
         <ErrorBoundary>
-          <MemoryRouter>
-            <SourcesPage />
-          </MemoryRouter>
+          <SourcesPage />
         </ErrorBoundary>
         <UiVersion />
       </Provider>

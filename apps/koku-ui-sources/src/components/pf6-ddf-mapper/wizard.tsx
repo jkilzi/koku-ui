@@ -20,7 +20,9 @@ const PF6WizardRenderer: React.FC<any> = () => {
   }
 
   const isLastStep = activeStepIndex >= navSchema.length - 1;
-  const nextStepName = selectNext?.({ values: formOptions.getState().values });
+  const nextStepName = currentStep.nextStep
+    ? selectNext?.(currentStep.nextStep, formOptions.getState)
+    : undefined;
   const isSubmitStep = nextStepName === conditionalSubmitFlag;
   const isNextDisabled = !formOptions.valid;
 

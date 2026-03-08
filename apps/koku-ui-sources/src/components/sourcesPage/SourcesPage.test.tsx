@@ -1,7 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import sourcesReducer from 'redux/sources/sourcesSlice';
 import { SourcesPage } from './SourcesPage';
@@ -38,9 +37,7 @@ const renderWithProviders = (preloadedState = {}) => {
   return render(
     <IntlProvider locale="en" defaultLocale="en">
       <Provider store={store}>
-        <MemoryRouter initialEntries={['/']}>
-          <SourcesPage />
-        </MemoryRouter>
+        <SourcesPage />
       </Provider>
     </IntlProvider>
   );
