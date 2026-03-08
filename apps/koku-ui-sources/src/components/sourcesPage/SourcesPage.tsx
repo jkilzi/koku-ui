@@ -1,10 +1,11 @@
 import { Bullseye, PageSection, Spinner } from '@patternfly/react-core';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from 'redux/store';
 import { loadEntities, setFilter, setPage } from 'redux/sources/sourcesSlice';
 import type { Source, SourceType } from 'typings/source';
 
+import { AddSourceWizard } from '../add-source-wizard/AddSourceWizard';
 import { SourcesTable } from '../sourcesTable/SourcesTable';
 import { SourcesToolbar } from '../sourcesTable/SourcesToolbar';
 import { SourcesEmptyState } from './SourcesEmptyState';
@@ -14,6 +15,8 @@ const SourcesPage: React.FC = () => {
   const { entities, count, loading, filterValue, page, perPage } = useSelector(
     (state: RootState) => state.sources
   );
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [preselectedType, setPreselectedType] = useState<string | undefined>();
 
   useEffect(() => {
     dispatch(loadEntities());
@@ -35,13 +38,24 @@ const SourcesPage: React.FC = () => {
     [dispatch]
   );
 
-  const handleSelectType = useCallback((_sourceType: SourceType) => {
-    // TODO: Increment 2 — open Add Source wizard with pre-selected type
+  const handleSelectType = useCallback((sourceType: SourceType) => {
+    setPreselectedType(sourceType.id);
+    setIsWizardOpen(true);
   }, []);
 
   const handleAddSource = useCallback(() => {
-    // TODO: Increment 2 — open Add Source wizard
+    setPreselectedType(undefined);
+    setIsWizardOpen(true);
   }, []);
+
+  const handleWizardClose = useCallback(() => {
+    setIsWizardOpen(false);
+    setPreselectedType(undefined);
+  }, []);
+
+  const handleWizardSuccess = useCallback(() => {
+    dispatch(loadEntities());
+  }, [dispatch]);
 
   const handleSelectSource = useCallback((_source: Source) => {
     // TODO: Increment 3 — navigate to source detail
@@ -66,18 +80,26 @@ const SourcesPage: React.FC = () => {
   }
 
   return (
-    <PageSection>
-      <SourcesToolbar
-        count={count}
-        page={page}
-        perPage={perPage}
-        filterValue={filterValue}
-        onFilterChange={handleFilterChange}
-        onPageChange={handlePageChange}
-        onAddSource={handleAddSource}
+    <>
+      <PageSection>
+        <SourcesToolbar
+          count={count}
+          page={page}
+          perPage={perPage}
+          filterValue={filterValue}
+          onFilterChange={handleFilterChange}
+          onPageChange={handlePageChange}
+          onAddSource={handleAddSource}
+        />
+        <SourcesTable sources={entities} onSelectSource={handleSelectSource} />
+      </PageSection>
+      <AddSourceWizard
+        isOpen={isWizardOpen}
+        onClose={handleWizardClose}
+        onSubmitSuccess={handleWizardSuccess}
+        preselectedType={preselectedType}
       />
-      <SourcesTable sources={entities} onSelectSource={handleSelectSource} />
-    </PageSection>
+    </>
   );
 };
 
