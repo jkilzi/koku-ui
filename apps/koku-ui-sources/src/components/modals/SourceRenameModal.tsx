@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  Form,
   FormGroup,
   Modal,
   ModalBody,
@@ -48,9 +49,11 @@ const SourceRenameModal: React.FC<SourceRenameModalProps> = ({ isOpen, source, o
       <ModalHeader title={intl.formatMessage(messages.rename)} />
       <ModalBody>
         {error && <Alert variant="danger" title={error} isInline style={{ marginBottom: '16px' }} />}
-        <FormGroup label={intl.formatMessage(messages.name)} isRequired fieldId="source-rename">
-          <TextInput id="source-rename" value={newName} onChange={(_event, value) => setNewName(value)} isRequired />
-        </FormGroup>
+        <Form>
+          <FormGroup label={intl.formatMessage(messages.name)} isRequired fieldId="source-rename">
+            <TextInput id="source-rename" value={newName} onChange={(_event, value) => setNewName(value)} isRequired />
+          </FormGroup>
+        </Form>
       </ModalBody>
       <ModalFooter>
         <Button variant="primary" onClick={handleSave} isLoading={isSaving} isDisabled={isSaving || !newName.trim()}>
