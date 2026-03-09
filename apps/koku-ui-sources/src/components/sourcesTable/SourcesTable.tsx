@@ -1,9 +1,11 @@
+import { Label } from '@patternfly/react-core';
 import { ActionsColumn, Table, TableVariant, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { getSourceTypeById } from 'api/sourceTypes';
 import messages from 'locales/messages';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import type { Source } from 'typings/source';
+import { formatRelativeDate } from 'utilities/relativeDate';
 
 interface SourcesTableProps {
   sources: Source[];
@@ -12,11 +14,9 @@ interface SourcesTableProps {
   onRemove: (source: Source) => void;
 }
 
-const formatDate = (dateStr?: string) => {
-  if (!dateStr) {
-    return '—';
-  }
-  return new Date(dateStr).toLocaleDateString();
+const getStatusColor = (source: Source): 'green' | 'orange' | 'red' => {
+  if (source.paused) return 'orange';
+  return source.active ? 'green' : 'red';
 };
 
 const formatStatus = (source: Source): string => {
@@ -49,8 +49,10 @@ const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource, on
               <Td dataLabel={intl.formatMessage(messages.sourceType)}>
                 {sourceType?.product_name ?? source.source_type}
               </Td>
-              <Td dataLabel={intl.formatMessage(messages.dateAdded)}>{formatDate(source.created_timestamp)}</Td>
-              <Td dataLabel={intl.formatMessage(messages.status)}>{formatStatus(source)}</Td>
+              <Td dataLabel={intl.formatMessage(messages.dateAdded)}>{formatRelativeDate(source.created_timestamp)}</Td>
+              <Td dataLabel={intl.formatMessage(messages.status)}>
+                <Label color={getStatusColor(source)}>{formatStatus(source)}</Label>
+              </Td>
               <Td isActionCell onClick={e => e.stopPropagation()}>
                 <ActionsColumn
                   items={[

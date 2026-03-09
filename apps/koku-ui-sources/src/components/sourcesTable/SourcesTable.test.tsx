@@ -70,11 +70,21 @@ describe('SourcesTable', () => {
 
     expect(screen.getByText('My OCP Source')).toBeInTheDocument();
     expect(screen.getByText('OpenShift Container Platform')).toBeInTheDocument();
-    expect(screen.getByText('Available')).toBeInTheDocument();
+    const availableStatus = screen.getByText('Available');
+    expect(availableStatus).toBeInTheDocument();
+    expect(availableStatus.closest('.pf-v6-c-label')).toBeInTheDocument();
 
     expect(screen.getByText('AWS Source')).toBeInTheDocument();
     expect(screen.getByText('Amazon Web Services')).toBeInTheDocument();
-    expect(screen.getByText('Paused')).toBeInTheDocument();
+    const pausedStatus = screen.getByText('Paused');
+    expect(pausedStatus).toBeInTheDocument();
+    expect(pausedStatus.closest('.pf-v6-c-label')).toBeInTheDocument();
+  });
+
+  it('renders relative dates in Date added column', () => {
+    renderWithIntl(mockSources);
+    // formatRelativeDate produces strings like "2 months ago" for Jan 2026 dates (vs Mar 2026)
+    expect(screen.getAllByText(/months? ago|\d+ days? ago|today|yesterday/).length).toBeGreaterThanOrEqual(2);
   });
 
   it('calls onSelectSource when row is clicked', async () => {
