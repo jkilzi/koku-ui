@@ -18,7 +18,9 @@ const FormTemplate: React.FC<any> = ({ formFields }) => {
 };
 
 const getWizardTitle = (preselectedType?: string): string => {
-  if (!preselectedType) return 'Add source';
+  if (!preselectedType) {
+    return 'Add source';
+  }
   const typeLabels: Record<string, string> = {
     OCP: 'Add an OpenShift source',
     AWS: 'Add an Amazon Web Services source',
@@ -97,42 +99,42 @@ const AddSourceWizard: React.FC<AddSourceWizardProps> = ({ isOpen, onClose, onSu
 
   return (
     <>
-    <Modal isOpen={isOpen} onClose={onClose} variant="large">
-      <ModalHeader title={getWizardTitle(preselectedType)} />
-      <ModalBody>
-        {error && (
-          <Alert variant="danger" title="Error creating source" isInline style={{ marginBottom: '16px' }}>
-            {error}
-          </Alert>
-        )}
-        <FormRenderer
-          schema={schema}
-          componentMapper={componentMapper}
-          FormTemplate={FormTemplate}
-          onSubmit={handleSubmit}
-          onCancel={handleCancel}
-          initialValues={initialValues}
-        />
-      </ModalBody>
-    </Modal>
-    <Modal
-      isOpen={isCancelConfirmOpen}
-      onClose={handleDismissCancel}
-      variant="small"
-      aria-label="Cancel confirmation"
-    >
-      <ModalHeader title="Exit source creation?" />
-      <ModalBody>All inputs will be discarded.</ModalBody>
-      <ModalFooter>
-        <Button variant="primary" onClick={handleConfirmCancel}>
-          Exit
-        </Button>
-        <Button variant="link" onClick={handleDismissCancel}>
-          Stay
-        </Button>
-      </ModalFooter>
-    </Modal>
-  </>
+      <Modal isOpen={isOpen} onClose={onClose} variant="large">
+        <ModalHeader title={getWizardTitle(preselectedType)} />
+        <ModalBody>
+          {error && (
+            <Alert variant="danger" title="Error creating source" isInline style={{ marginBottom: '16px' }}>
+              {error}
+            </Alert>
+          )}
+          <FormRenderer
+            schema={schema}
+            componentMapper={componentMapper}
+            FormTemplate={FormTemplate}
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            initialValues={initialValues}
+          />
+        </ModalBody>
+      </Modal>
+      <Modal
+        isOpen={isCancelConfirmOpen}
+        onClose={handleDismissCancel}
+        variant="small"
+        aria-label="Cancel confirmation"
+      >
+        <ModalHeader title="Exit source creation?" />
+        <ModalBody>All inputs will be discarded.</ModalBody>
+        <ModalFooter>
+          <Button variant="primary" onClick={handleConfirmCancel}>
+            Exit
+          </Button>
+          <Button variant="link" onClick={handleDismissCancel}>
+            Stay
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
   );
 };
 

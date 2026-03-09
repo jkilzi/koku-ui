@@ -1,13 +1,4 @@
-import {
-  ActionGroup,
-  Button,
-  Card,
-  CardBody,
-  CardTitle,
-  Form,
-  FormGroup,
-  TextInput,
-} from '@patternfly/react-core';
+import { ActionGroup, Button, Card, CardBody, CardTitle, Form, FormGroup, TextInput } from '@patternfly/react-core';
 import React, { useCallback, useEffect, useState } from 'react';
 import type { Source } from 'typings/source';
 
@@ -58,9 +49,7 @@ const CredentialForm: React.FC<CredentialFormProps> = ({ source, onSave }) => {
   const sourceTypeName = source.source_type;
   const isOCP = sourceTypeName === 'OCP';
 
-  const [formValues, setFormValues] = useState<Record<string, string>>(() =>
-    getInitialFormValues(source)
-  );
+  const [formValues, setFormValues] = useState<Record<string, string>>(() => getInitialFormValues(source));
   const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
@@ -97,11 +86,7 @@ const CredentialForm: React.FC<CredentialFormProps> = ({ source, onSave }) => {
       <CardBody>
         <Form>
           {Object.entries(formValues).map(([key, value]) => (
-            <FormGroup
-              key={key}
-              label={formatLabel(key)}
-              fieldId={`credential-${key}`}
-            >
+            <FormGroup key={key} label={formatLabel(key)} fieldId={`credential-${key}`}>
               <TextInput
                 id={`credential-${key}`}
                 value={value}

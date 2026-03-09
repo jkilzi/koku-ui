@@ -27,9 +27,7 @@ const ReviewSummary: React.FC = () => {
       </DescriptionListGroup>
       {Object.entries(credentials).map(([key, value]) => (
         <DescriptionListGroup key={key}>
-          <DescriptionListTerm>
-            {key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
-          </DescriptionListTerm>
+          <DescriptionListTerm>{key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</DescriptionListTerm>
           <DescriptionListDescription>{String(value) || '—'}</DescriptionListDescription>
         </DescriptionListGroup>
       ))}

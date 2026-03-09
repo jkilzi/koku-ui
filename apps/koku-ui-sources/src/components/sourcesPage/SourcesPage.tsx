@@ -1,5 +1,5 @@
-import { pauseSource, resumeSource } from 'api/entities';
 import { Bullseye, PageSection, Spinner } from '@patternfly/react-core';
+import { pauseSource, resumeSource } from 'api/entities';
 import { AddSourceWizard } from 'components/add-source-wizard/AddSourceWizard';
 import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
 import { SourceDetail } from 'components/sourceDetail/SourceDetail';

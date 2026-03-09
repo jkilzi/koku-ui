@@ -1,6 +1,6 @@
 import componentTypes from '@data-driven-forms/react-form-renderer/component-types';
-
 import { ReviewSummary } from 'components/add-source-wizard/ReviewSummary';
+
 import CardSelect from './cardSelect';
 import PlainText from './plainText';
 import Select from './select';

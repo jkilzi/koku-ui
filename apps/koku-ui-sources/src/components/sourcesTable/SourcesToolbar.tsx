@@ -62,12 +62,8 @@ const SourcesToolbar: React.FC<SourcesToolbarProps> = ({
       <ToolbarContent>
         <ToolbarItem>
           <Select
-            toggle={(toggleRef) => (
-              <MenuToggle
-                ref={toggleRef}
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
-                isExpanded={isFilterOpen}
-              >
+            toggle={toggleRef => (
+              <MenuToggle ref={toggleRef} onClick={() => setIsFilterOpen(!isFilterOpen)} isExpanded={isFilterOpen}>
                 {filterColumnLabels[filterColumn]}
               </MenuToggle>
             )}

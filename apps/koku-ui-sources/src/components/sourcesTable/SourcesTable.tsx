@@ -18,7 +18,9 @@ interface SourcesTableProps {
 }
 
 const getStatusColor = (source: Source): 'green' | 'orange' | 'red' => {
-  if (source.paused) return 'orange';
+  if (source.paused) {
+    return 'orange';
+  }
   return source.active ? 'green' : 'red';
 };
 
@@ -99,9 +101,7 @@ const SourcesTable: React.FC<SourcesTableProps> = ({
                 <ActionsColumn
                   items={[
                     {
-                      title: source.paused
-                        ? intl.formatMessage(messages.resume)
-                        : intl.formatMessage(messages.pause),
+                      title: source.paused ? intl.formatMessage(messages.resume) : intl.formatMessage(messages.pause),
                       description: source.paused
                         ? intl.formatMessage(messages.resumeDescription)
                         : intl.formatMessage(messages.pauseDescription),

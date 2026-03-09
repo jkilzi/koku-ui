@@ -11,10 +11,7 @@ const DIVISIONS: { amount: number; name: Intl.RelativeTimeFormatUnit }[] = [
  * Format an ISO date string as a relative time string (e.g., "3 days ago").
  * Returns '—' for falsy input.
  */
-export const formatRelativeDate = (
-  dateStr: string | undefined | null,
-  locale?: string
-): string => {
+export const formatRelativeDate = (dateStr: string | undefined | null, locale?: string): string => {
   if (!dateStr) {
     return '—';
   }

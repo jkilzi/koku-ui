@@ -21,7 +21,7 @@ interface NavSchemaItem {
 }
 
 const getStepLabel = (step: NavSchemaItem | string): string =>
-  typeof step === 'string' ? step : (step.title || step.name || '');
+  typeof step === 'string' ? step : step.title || step.name || '';
 
 const PF6WizardRenderer: React.FC<any> = () => {
   const {
@@ -36,14 +36,8 @@ const PF6WizardRenderer: React.FC<any> = () => {
     jumpToStep,
   } = useContext(WizardContext as React.Context<any>);
 
-  if (!currentStep) {
-    return null;
-  }
-
   const isLastStep = activeStepIndex >= navSchema.length - 1;
-  const nextStepName = currentStep.nextStep
-    ? selectNext?.(currentStep.nextStep, formOptions.getState)
-    : undefined;
+  const nextStepName = currentStep?.nextStep ? selectNext?.(currentStep.nextStep, formOptions.getState) : undefined;
   const isSubmitStep = nextStepName === conditionalSubmitFlag;
 
   const onNext = useCallback(() => {
@@ -76,12 +70,16 @@ const PF6WizardRenderer: React.FC<any> = () => {
     [activeStepIndex, jumpToStep]
   );
 
+  if (!currentStep) {
+    return null;
+  }
+
   return (
     <div className={css(styles.wizard)} style={{ minHeight: 400, display: 'flex', flexDirection: 'column' }}>
       <div className={css(styles.wizardOuterWrap)}>
         <div className={css(styles.wizardInnerWrap)}>
           <WizardNav aria-label="Wizard steps" isExpanded>
-            {steps.map((step) => (
+            {steps.map(step => (
               <WizardNavItem
                 key={step.id}
                 id={step.id}
@@ -108,20 +106,12 @@ const PF6WizardRenderer: React.FC<any> = () => {
           <ActionList>
             <ActionListGroup>
               <ActionListItem>
-                <Button
-                  variant={ButtonVariant.primary}
-                  onClick={onNext}
-                  isDisabled={!formOptions.valid}
-                >
+                <Button variant={ButtonVariant.primary} onClick={onNext} isDisabled={!formOptions.valid}>
                   {isLastStep || isSubmitStep ? 'Submit' : 'Next'}
                 </Button>
               </ActionListItem>
               <ActionListItem>
-                <Button
-                  variant={ButtonVariant.secondary}
-                  onClick={onBack}
-                  isDisabled={activeStepIndex === 0}
-                >
+                <Button variant={ButtonVariant.secondary} onClick={onBack} isDisabled={activeStepIndex === 0}>
                   Back
                 </Button>
               </ActionListItem>

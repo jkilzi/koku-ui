@@ -1,8 +1,7 @@
 import { Card, CardBody, Title } from '@patternfly/react-core';
+import { sourceTypeIconMap } from 'components/sourcesPage/sourceTypeIcons';
 import React from 'react';
 import type { SourceType } from 'typings/source';
-
-import { sourceTypeIconMap } from 'components/sourcesPage/sourceTypeIcons';
 
 interface SourceTypeTileProps {
   sourceType: SourceType;

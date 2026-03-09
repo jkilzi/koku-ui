@@ -20,9 +20,9 @@ import {
 import { EllipsisVIcon } from '@patternfly/react-icons';
 import { getSource, pauseSource, resumeSource } from 'api/entities';
 import { getSourceTypeById } from 'api/sourceTypes';
-import { CredentialForm } from 'components/sourceDetail/CredentialForm';
 import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
 import { SourceRenameModal } from 'components/modals/SourceRenameModal';
+import { CredentialForm } from 'components/sourceDetail/CredentialForm';
 import messages from 'locales/messages';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -71,7 +71,9 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
   }, [fetchSource]);
 
   const handleTogglePause = useCallback(async () => {
-    if (!source) return;
+    if (!source) {
+      return;
+    }
     try {
       if (source.paused) {
         await resumeSource(source.uuid);
@@ -88,13 +90,10 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
     fetchSource();
   }, [fetchSource]);
 
-  const handleSaveCredentials = useCallback(
-    async (credentials: Record<string, string>) => {
-      // TODO: implement credential update API call
-      console.log('Saving credentials:', credentials);
-    },
-    []
-  );
+  const handleSaveCredentials = useCallback(async (credentials: Record<string, string>) => {
+    // TODO: implement credential update API call - credentials will be sent to API
+    void credentials;
+  }, []);
 
   if (loading) {
     return (
@@ -145,7 +144,7 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
           <Dropdown
             isOpen={isKebabOpen}
             onOpenChange={setIsKebabOpen}
-            toggle={(toggleRef) => (
+            toggle={toggleRef => (
               <MenuToggle
                 ref={toggleRef}
                 variant="plain"
