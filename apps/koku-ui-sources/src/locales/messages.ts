@@ -65,6 +65,43 @@ export default defineMessages({
     id: 'sources.remove',
     defaultMessage: 'Remove',
   },
+  pause: {
+    id: 'sources.pause',
+    defaultMessage: 'Pause',
+  },
+  resume: {
+    id: 'sources.resume',
+    defaultMessage: 'Resume',
+  },
+  pauseDescription: {
+    id: 'sources.pauseDescription',
+    defaultMessage: 'Pause data collection for this source',
+  },
+  resumeDescription: {
+    id: 'sources.resumeDescription',
+    defaultMessage: 'Unpause data collection for this source',
+  },
+  removeDescription: {
+    id: 'sources.removeDescription',
+    defaultMessage: 'Permanently delete this source and all collected data',
+  },
+  sourcePaused: {
+    id: 'sources.sourcePaused',
+    defaultMessage: 'Source paused',
+  },
+  sourcePausedBody: {
+    id: 'sources.sourcePausedBody',
+    defaultMessage:
+      'No data is being collected for this source. Turn the source back on to reestablish connection and data collection.',
+  },
+  resumeConnection: {
+    id: 'sources.resumeConnection',
+    defaultMessage: 'Resume connection',
+  },
+  checkAvailability: {
+    id: 'sources.checkAvailability',
+    defaultMessage: 'Check source availability',
+  },
   viewDetails: {
     id: 'sources.viewDetails',
     defaultMessage: 'View details',

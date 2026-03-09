@@ -5,6 +5,8 @@ import {
   createSource,
   updateSource,
   deleteSource,
+  pauseSource,
+  resumeSource,
   createApplication,
 } from './entities';
 
@@ -103,6 +105,36 @@ describe('entities API', () => {
       expect(mockedAxios.delete).toHaveBeenCalledWith(
         '/api/cost-management/v1/sources/uuid-1/'
       );
+    });
+  });
+
+  describe('pauseSource', () => {
+    it('calls axios.patch with correct URL and paused: true', async () => {
+      const mockSource = { id: 1, uuid: 'uuid-1', name: 'Test', paused: true };
+      mockedAxios.patch.mockResolvedValue({ data: mockSource });
+
+      const result = await pauseSource('uuid-1');
+
+      expect(mockedAxios.patch).toHaveBeenCalledWith(
+        '/api/cost-management/v1/sources/uuid-1/',
+        { paused: true }
+      );
+      expect(result).toEqual(mockSource);
+    });
+  });
+
+  describe('resumeSource', () => {
+    it('calls axios.patch with correct URL and paused: false', async () => {
+      const mockSource = { id: 1, uuid: 'uuid-1', name: 'Test', paused: false };
+      mockedAxios.patch.mockResolvedValue({ data: mockSource });
+
+      const result = await resumeSource('uuid-1');
+
+      expect(mockedAxios.patch).toHaveBeenCalledWith(
+        '/api/cost-management/v1/sources/uuid-1/',
+        { paused: false }
+      );
+      expect(result).toEqual(mockSource);
     });
   });
 

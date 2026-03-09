@@ -30,6 +30,14 @@ export const deleteSource = (uuid: string): Promise<void> => {
   return axios.delete(`${SOURCES_PATH}/${uuid}/`);
 };
 
+export const pauseSource = (uuid: string): Promise<Source> => {
+  return axios.patch(`${SOURCES_PATH}/${uuid}/`, { paused: true }).then(res => res.data);
+};
+
+export const resumeSource = (uuid: string): Promise<Source> => {
+  return axios.patch(`${SOURCES_PATH}/${uuid}/`, { paused: false }).then(res => res.data);
+};
+
 export const createApplication = (data: {
   source_id: number;
   application_type_id: number;
