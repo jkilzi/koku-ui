@@ -20,6 +20,7 @@ import {
 import { EllipsisVIcon } from '@patternfly/react-icons';
 import { getSource, pauseSource, resumeSource } from 'api/entities';
 import { getSourceTypeById } from 'api/sourceTypes';
+import { CredentialForm } from 'components/sourceDetail/CredentialForm';
 import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
 import { SourceRenameModal } from 'components/modals/SourceRenameModal';
 import messages from 'locales/messages';
@@ -86,6 +87,14 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
   const handleCheckAvailability = useCallback(() => {
     fetchSource();
   }, [fetchSource]);
+
+  const handleSaveCredentials = useCallback(
+    async (credentials: Record<string, string>) => {
+      // TODO: implement credential update API call
+      console.log('Saving credentials:', credentials);
+    },
+    []
+  );
 
   if (loading) {
     return (
@@ -214,19 +223,9 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
             <DescriptionListTerm>{intl.formatMessage(messages.dateAdded)}</DescriptionListTerm>
             <DescriptionListDescription>{formatRelativeDate(source.created_timestamp)}</DescriptionListDescription>
           </DescriptionListGroup>
-          {source.authentication?.credentials?.cluster_id && (
-            <DescriptionListGroup>
-              <DescriptionListTerm>Cluster ID</DescriptionListTerm>
-              <DescriptionListDescription>{source.authentication.credentials.cluster_id}</DescriptionListDescription>
-            </DescriptionListGroup>
-          )}
-          {source.billing_source?.data_source?.bucket && (
-            <DescriptionListGroup>
-              <DescriptionListTerm>S3 bucket</DescriptionListTerm>
-              <DescriptionListDescription>{source.billing_source.data_source.bucket}</DescriptionListDescription>
-            </DescriptionListGroup>
-          )}
         </DescriptionList>
+
+        <CredentialForm source={source} onSave={handleSaveCredentials} />
       </PageSection>
 
       <SourceRemoveModal
