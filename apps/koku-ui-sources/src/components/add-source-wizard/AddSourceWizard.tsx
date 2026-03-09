@@ -17,6 +17,17 @@ const FormTemplate: React.FC<any> = ({ formFields }) => {
   return <>{formFields}</>;
 };
 
+const getWizardTitle = (preselectedType?: string): string => {
+  if (!preselectedType) return 'Add source';
+  const typeLabels: Record<string, string> = {
+    OCP: 'Add an OpenShift source',
+    AWS: 'Add an Amazon Web Services source',
+    Azure: 'Add a Microsoft Azure source',
+    GCP: 'Add a Google Cloud Platform source',
+  };
+  return typeLabels[preselectedType] || 'Add source';
+};
+
 const AddSourceWizard: React.FC<AddSourceWizardProps> = ({ isOpen, onClose, onSubmitSuccess, preselectedType }) => {
   const [error, setError] = useState<string | null>(null);
 
@@ -72,7 +83,7 @@ const AddSourceWizard: React.FC<AddSourceWizardProps> = ({ isOpen, onClose, onSu
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} variant="large">
-      <ModalHeader title="Add source" />
+      <ModalHeader title={getWizardTitle(preselectedType)} />
       <ModalBody>
         {error && (
           <Alert variant="danger" title="Error creating source" isInline style={{ marginBottom: '16px' }}>

@@ -1,7 +1,27 @@
 import Wizard from '@data-driven-forms/common/wizard';
 import WizardContext from '@data-driven-forms/react-form-renderer/wizard-context';
-import { Button, ButtonVariant } from '@patternfly/react-core';
-import React, { useContext } from 'react';
+import {
+  ActionList,
+  ActionListGroup,
+  ActionListItem,
+  Button,
+  ButtonVariant,
+  WizardFooterWrapper,
+  WizardNav,
+  WizardNavItem,
+} from '@patternfly/react-core';
+import { css } from '@patternfly/react-styles';
+import styles from '@patternfly/react-styles/css/components/Wizard/wizard';
+import React, { useCallback, useContext, useMemo } from 'react';
+
+interface NavSchemaItem {
+  name: string;
+  title?: string;
+  [key: string]: unknown;
+}
+
+const getStepLabel = (step: NavSchemaItem | string): string =>
+  typeof step === 'string' ? step : (step.title || step.name || '');
 
 const PF6WizardRenderer: React.FC<any> = () => {
   const {
@@ -13,6 +33,7 @@ const PF6WizardRenderer: React.FC<any> = () => {
     activeStepIndex,
     selectNext,
     conditionalSubmitFlag,
+    jumpToStep,
   } = useContext(WizardContext as React.Context<any>);
 
   if (!currentStep) {
@@ -24,33 +45,97 @@ const PF6WizardRenderer: React.FC<any> = () => {
     ? selectNext?.(currentStep.nextStep, formOptions.getState)
     : undefined;
   const isSubmitStep = nextStepName === conditionalSubmitFlag;
-  const isNextDisabled = !formOptions.valid;
 
-  const onNext = () => {
+  const onNext = useCallback(() => {
     if (isLastStep || isSubmitStep) {
       formOptions.handleSubmit?.();
     } else {
       handleNext(nextStepName);
     }
-  };
+  }, [isLastStep, isSubmitStep, formOptions, handleNext, nextStepName]);
+
+  const onBack = useCallback(() => {
+    handlePrev();
+  }, [handlePrev]);
+
+  const steps = useMemo(() => {
+    return (navSchema || []).map((step: NavSchemaItem | string, index: number) => ({
+      id: typeof step === 'string' ? step : step.name,
+      label: getStepLabel(step),
+      index,
+      isDisabled: index > activeStepIndex,
+    }));
+  }, [navSchema, activeStepIndex]);
+
+  const handleNavClick = useCallback(
+    (index: number) => {
+      if (index <= activeStepIndex && jumpToStep) {
+        jumpToStep(index);
+      }
+    },
+    [activeStepIndex, jumpToStep]
+  );
 
   return (
-    <div>
-      <div style={{ marginBottom: '24px' }}>
-        <h2>{currentStep.title || currentStep.name}</h2>
+    <div className={css(styles.wizard)} style={{ minHeight: 400, display: 'flex', flexDirection: 'column' }}>
+      <div className={css(styles.wizardOuterWrap)}>
+        <div className={css(styles.wizardInnerWrap)}>
+          <WizardNav aria-label="Wizard steps" isExpanded>
+            {steps.map((step) => (
+              <WizardNavItem
+                key={step.id}
+                id={step.id}
+                content={step.label}
+                isCurrent={step.index === activeStepIndex}
+                isDisabled={step.isDisabled}
+                stepIndex={step.index}
+                onClick={(_, idx) => handleNavClick(idx)}
+              />
+            ))}
+          </WizardNav>
+          <main className={css(styles.wizardMain)}>
+            <div className={css(styles.wizardMainBody)}>
+              <h2 className={css(styles.wizardTitleText)} style={{ marginBottom: '1rem' }}>
+                {currentStep.title || currentStep.name}
+              </h2>
+              <div style={{ marginBottom: '24px' }}>
+                {currentStep.fields && formOptions.renderForm(currentStep.fields)}
+              </div>
+            </div>
+          </main>
+        </div>
+        <WizardFooterWrapper>
+          <ActionList>
+            <ActionListGroup>
+              <ActionListItem>
+                <Button
+                  variant={ButtonVariant.primary}
+                  onClick={onNext}
+                  isDisabled={!formOptions.valid}
+                >
+                  {isLastStep || isSubmitStep ? 'Submit' : 'Next'}
+                </Button>
+              </ActionListItem>
+              <ActionListItem>
+                <Button
+                  variant={ButtonVariant.secondary}
+                  onClick={onBack}
+                  isDisabled={activeStepIndex === 0}
+                >
+                  Back
+                </Button>
+              </ActionListItem>
+            </ActionListGroup>
+            <ActionListGroup>
+              <ActionListItem>
+                <Button variant={ButtonVariant.link} onClick={formOptions.onCancel}>
+                  Cancel
+                </Button>
+              </ActionListItem>
+            </ActionListGroup>
+          </ActionList>
+        </WizardFooterWrapper>
       </div>
-      <div style={{ marginBottom: '24px' }}>{currentStep.fields && formOptions.renderForm(currentStep.fields)}</div>
-      <footer style={{ display: 'flex', gap: '16px', justifyContent: 'flex-end', paddingTop: '16px' }}>
-        <Button variant={ButtonVariant.secondary} onClick={handlePrev} isDisabled={activeStepIndex === 0}>
-          Back
-        </Button>
-        <Button variant={ButtonVariant.primary} onClick={onNext} isDisabled={isNextDisabled}>
-          {isLastStep || isSubmitStep ? 'Submit' : 'Next'}
-        </Button>
-        <Button variant={ButtonVariant.link} onClick={formOptions.onCancel}>
-          Cancel
-        </Button>
-      </footer>
     </div>
   );
 };
