@@ -1,7 +1,11 @@
 import {
   Button,
+  MenuToggle,
   Pagination,
   SearchInput,
+  Select,
+  SelectList,
+  SelectOption,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
@@ -16,7 +20,9 @@ interface SourcesToolbarProps {
   page: number;
   perPage: number;
   filterValue: string;
+  filterColumn: 'name' | 'source_type' | 'availability_status';
   onFilterChange: (value: string) => void;
+  onFilterColumnChange: (column: 'name' | 'source_type' | 'availability_status') => void;
   onPageChange: (page: number, perPage: number) => void;
   onAddSource: () => void;
 }
@@ -26,12 +32,21 @@ const SourcesToolbar: React.FC<SourcesToolbarProps> = ({
   page,
   perPage,
   filterValue,
+  filterColumn,
   onFilterChange,
+  onFilterColumnChange,
   onPageChange,
   onAddSource,
 }) => {
   const intl = useIntl();
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [localFilter, setLocalFilter] = useState(filterValue);
+
+  const filterColumnLabels: Record<string, string> = {
+    name: intl.formatMessage(messages.name),
+    source_type: intl.formatMessage(messages.sourceType),
+    availability_status: intl.formatMessage(messages.status),
+  };
 
   const handleFilterSubmit = useCallback(() => {
     onFilterChange(localFilter);
@@ -45,6 +60,31 @@ const SourcesToolbar: React.FC<SourcesToolbarProps> = ({
   return (
     <Toolbar>
       <ToolbarContent>
+        <ToolbarItem>
+          <Select
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                isExpanded={isFilterOpen}
+              >
+                {filterColumnLabels[filterColumn]}
+              </MenuToggle>
+            )}
+            onSelect={(_event, value) => {
+              onFilterColumnChange(value as typeof filterColumn);
+              setIsFilterOpen(false);
+            }}
+            isOpen={isFilterOpen}
+            onOpenChange={setIsFilterOpen}
+          >
+            <SelectList>
+              <SelectOption value="name">{intl.formatMessage(messages.name)}</SelectOption>
+              <SelectOption value="source_type">{intl.formatMessage(messages.sourceType)}</SelectOption>
+              <SelectOption value="availability_status">{intl.formatMessage(messages.status)}</SelectOption>
+            </SelectList>
+          </Select>
+        </ToolbarItem>
         <ToolbarItem>
           <SearchInput
             placeholder={intl.formatMessage(messages.filterByName)}

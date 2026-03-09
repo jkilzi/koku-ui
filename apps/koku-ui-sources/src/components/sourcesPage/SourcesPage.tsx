@@ -17,7 +17,7 @@ type ViewState = { type: 'list' } | { type: 'detail'; uuid: string };
 
 const SourcesPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { entities, count, loading, filterValue, page, perPage, sortBy, sortDirection } = useSelector(
+  const { entities, count, loading, filterValue, filterColumn, page, perPage, sortBy, sortDirection } = useSelector(
     (state: RootState) => state.sources
   );
   const [currentView, setCurrentView] = useState<ViewState>({ type: 'list' });
@@ -28,12 +28,19 @@ const SourcesPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(loadEntities());
-  }, [dispatch, filterValue, page, perPage]);
+  }, [dispatch, filterValue, filterColumn, page, perPage]);
 
   const handleFilterChange = useCallback(
     (value: string) => {
       dispatch(setFilter({ filterValue: value }));
       dispatch(loadEntities());
+    },
+    [dispatch]
+  );
+
+  const handleFilterColumnChange = useCallback(
+    (column: 'name' | 'source_type' | 'availability_status') => {
+      dispatch(setFilter({ filterColumn: column, filterValue: '' }));
     },
     [dispatch]
   );
@@ -120,7 +127,9 @@ const SourcesPage: React.FC = () => {
           page={page}
           perPage={perPage}
           filterValue={filterValue}
+          filterColumn={filterColumn}
           onFilterChange={handleFilterChange}
+          onFilterColumnChange={handleFilterColumnChange}
           onPageChange={handlePageChange}
           onAddSource={handleAddSource}
         />
