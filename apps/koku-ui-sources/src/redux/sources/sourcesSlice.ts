@@ -38,6 +38,9 @@ export const loadEntities = createAsyncThunk('sources/loadEntities', async (_, {
     const paramKey = state.filterColumn === 'source_type' ? 'type' : state.filterColumn;
     params[paramKey] = state.filterValue;
   }
+  if (state.sortBy) {
+    params.ordering = state.sortDirection === 'desc' ? `-${state.sortBy}` : state.sortBy;
+  }
   return listSourcesApi(params);
 });
 

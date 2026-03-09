@@ -48,6 +48,36 @@ describe('entities API', () => {
         params: { name: 'test' },
       });
     });
+
+    it('passes ordering for ascending sort', async () => {
+      const mockResponse = {
+        data: [],
+        meta: { count: 0 },
+        links: { first: '', next: null, previous: null, last: '' },
+      };
+      mockedAxios.get.mockResolvedValue({ data: mockResponse });
+
+      await listSources({ ordering: 'name' });
+
+      expect(mockedAxios.get).toHaveBeenCalledWith('/api/cost-management/v1/sources/', {
+        params: { ordering: 'name' },
+      });
+    });
+
+    it('passes ordering for descending sort', async () => {
+      const mockResponse = {
+        data: [],
+        meta: { count: 0 },
+        links: { first: '', next: null, previous: null, last: '' },
+      };
+      mockedAxios.get.mockResolvedValue({ data: mockResponse });
+
+      await listSources({ ordering: '-created_timestamp' });
+
+      expect(mockedAxios.get).toHaveBeenCalledWith('/api/cost-management/v1/sources/', {
+        params: { ordering: '-created_timestamp' },
+      });
+    });
   });
 
   describe('getSource', () => {

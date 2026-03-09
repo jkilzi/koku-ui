@@ -7,7 +7,7 @@ import { SourcesTable } from 'components/sourcesTable/SourcesTable';
 import { SourcesToolbar } from 'components/sourcesTable/SourcesToolbar';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadEntities, setFilter, setPage } from 'redux/sources/sourcesSlice';
+import { loadEntities, setFilter, setPage, setSort } from 'redux/sources/sourcesSlice';
 import type { AppDispatch, RootState } from 'redux/store';
 import type { Source, SourceType } from 'typings/source';
 
@@ -17,7 +17,9 @@ type ViewState = { type: 'list' } | { type: 'detail'; uuid: string };
 
 const SourcesPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { entities, count, loading, filterValue, page, perPage } = useSelector((state: RootState) => state.sources);
+  const { entities, count, loading, filterValue, page, perPage, sortBy, sortDirection } = useSelector(
+    (state: RootState) => state.sources
+  );
   const [currentView, setCurrentView] = useState<ViewState>({ type: 'list' });
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [preselectedType, setPreselectedType] = useState<string | undefined>();
@@ -39,6 +41,14 @@ const SourcesPage: React.FC = () => {
   const handlePageChange = useCallback(
     (newPage: number, newPerPage: number) => {
       dispatch(setPage({ page: newPage, perPage: newPerPage }));
+      dispatch(loadEntities());
+    },
+    [dispatch]
+  );
+
+  const handleSort = useCallback(
+    (newSortBy: string, direction: 'asc' | 'desc') => {
+      dispatch(setSort({ sortBy: newSortBy, sortDirection: direction }));
       dispatch(loadEntities());
     },
     [dispatch]
@@ -119,6 +129,9 @@ const SourcesPage: React.FC = () => {
           onSelectSource={handleSelectSource}
           onRename={handleRename}
           onRemove={handleRemove}
+          sortBy={sortBy}
+          sortDirection={sortDirection}
+          onSort={handleSort}
         />
       </PageSection>
     );

@@ -6,6 +6,7 @@ import { APPLICATIONS_PATH, SOURCES_PATH } from './constants';
 interface ListSourcesParams {
   name?: string;
   type?: string;
+  ordering?: string;
   offset?: number;
   limit?: number;
 }

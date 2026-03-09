@@ -1,4 +1,4 @@
-import { Label } from '@patternfly/react-core';
+import { Button, Label } from '@patternfly/react-core';
 import { ActionsColumn, Table, TableVariant, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { getSourceTypeById } from 'api/sourceTypes';
 import messages from 'locales/messages';
@@ -12,6 +12,9 @@ interface SourcesTableProps {
   onSelectSource: (source: Source) => void;
   onRename: (source: Source) => void;
   onRemove: (source: Source) => void;
+  sortBy: string;
+  sortDirection: 'asc' | 'desc';
+  onSort: (sortBy: string, direction: 'asc' | 'desc') => void;
 }
 
 const getStatusColor = (source: Source): 'green' | 'orange' | 'red' => {
@@ -26,16 +29,51 @@ const formatStatus = (source: Source): string => {
   return source.active ? 'Available' : 'Unavailable';
 };
 
-const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource, onRename, onRemove }) => {
+const columnFields = ['name', 'source_type', 'created_timestamp'];
+
+const SourcesTable: React.FC<SourcesTableProps> = ({
+  sources,
+  onSelectSource,
+  onRename,
+  onRemove,
+  sortBy,
+  sortDirection,
+  onSort,
+}) => {
   const intl = useIntl();
+  const activeSortIndex = columnFields.indexOf(sortBy);
 
   return (
     <Table aria-label="Sources table" variant={TableVariant.compact}>
       <Thead>
         <Tr>
-          <Th>{intl.formatMessage(messages.name)}</Th>
-          <Th>{intl.formatMessage(messages.sourceType)}</Th>
-          <Th>{intl.formatMessage(messages.dateAdded)}</Th>
+          <Th
+            sort={{
+              sortBy: { index: activeSortIndex >= 0 ? activeSortIndex : 0, direction: sortDirection },
+              onSort: (_event, index, direction) => onSort(columnFields[index], direction),
+              columnIndex: 0,
+            }}
+          >
+            {intl.formatMessage(messages.name)}
+          </Th>
+          <Th
+            sort={{
+              sortBy: { index: activeSortIndex >= 0 ? activeSortIndex : 0, direction: sortDirection },
+              onSort: (_event, index, direction) => onSort(columnFields[index], direction),
+              columnIndex: 1,
+            }}
+          >
+            {intl.formatMessage(messages.sourceType)}
+          </Th>
+          <Th
+            sort={{
+              sortBy: { index: activeSortIndex >= 0 ? activeSortIndex : 0, direction: sortDirection },
+              onSort: (_event, index, direction) => onSort(columnFields[index], direction),
+              columnIndex: 2,
+            }}
+          >
+            {intl.formatMessage(messages.dateAdded)}
+          </Th>
           <Th>{intl.formatMessage(messages.status)}</Th>
           <Th screenReaderText="Actions" />
         </Tr>
@@ -45,7 +83,11 @@ const SourcesTable: React.FC<SourcesTableProps> = ({ sources, onSelectSource, on
           const sourceType = getSourceTypeById(source.source_type);
           return (
             <Tr key={source.uuid} isClickable onRowClick={() => onSelectSource(source)}>
-              <Td dataLabel={intl.formatMessage(messages.name)}>{source.name}</Td>
+              <Td dataLabel={intl.formatMessage(messages.name)}>
+                <Button variant="link" isInline onClick={() => onSelectSource(source)}>
+                  {source.name}
+                </Button>
+              </Td>
               <Td dataLabel={intl.formatMessage(messages.sourceType)}>
                 {sourceType?.product_name ?? source.source_type}
               </Td>

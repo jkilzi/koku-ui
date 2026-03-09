@@ -47,6 +47,9 @@ const renderWithIntl = (sources: Source[], props: Partial<Parameters<typeof Sour
     onSelectSource: jest.fn(),
     onRename: jest.fn(),
     onRemove: jest.fn(),
+    sortBy: 'name',
+    sortDirection: 'asc' as const,
+    onSort: jest.fn(),
   };
   return render(
     <IntlProvider locale="en" defaultLocale="en">
@@ -108,7 +111,7 @@ describe('SourcesTable', () => {
       onRemove,
     });
 
-    const kebabButtons = screen.getAllByRole('button');
+    const kebabButtons = screen.getAllByRole('button', { name: 'Kebab toggle' });
     expect(kebabButtons.length).toBeGreaterThan(0);
 
     await user.click(kebabButtons[0]);
