@@ -1,5 +1,5 @@
 import FormRenderer from '@data-driven-forms/react-form-renderer/form-renderer';
-import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@patternfly/react-core';
+import { Alert, Button, Form, Modal, ModalBody, ModalFooter, ModalHeader } from '@patternfly/react-core';
 import { createApplication, createSource, deleteSource } from 'api/entities';
 import componentMapper from 'components/pf6-ddf-mapper';
 import React, { useCallback, useState } from 'react';
@@ -14,7 +14,7 @@ interface AddSourceWizardProps {
 }
 
 const FormTemplate: React.FC<any> = ({ formFields }) => {
-  return <form onSubmit={e => e.preventDefault()}>{formFields}</form>;
+  return <Form onSubmit={e => e.preventDefault()}>{formFields}</Form>;
 };
 
 const getWizardTitle = (preselectedType?: string): string => {
