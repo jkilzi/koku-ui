@@ -17,7 +17,7 @@ import {
   Spinner,
   Title,
 } from '@patternfly/react-core';
-import { EllipsisVIcon } from '@patternfly/react-icons';
+import { EllipsisVIcon, RedoIcon } from '@patternfly/react-icons';
 import { getSource, pauseSource, resumeSource } from 'api/entities';
 import { getSourceTypeById } from 'api/sourceTypes';
 import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
@@ -76,9 +76,9 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
     }
     try {
       if (source.paused) {
-        await resumeSource(source.uuid);
+        await resumeSource(source);
       } else {
-        await pauseSource(source.uuid);
+        await pauseSource(source);
       }
       fetchSource();
     } catch {
@@ -203,19 +203,31 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
           </Alert>
         )}
 
-        <Button variant="secondary" onClick={handleCheckAvailability} style={{ marginBottom: '24px' }}>
-          {intl.formatMessage(messages.checkAvailability)}
-        </Button>
+        <Title headingLevel="h3" style={{ marginBottom: '16px' }}>
+          {intl.formatMessage(messages.sourceSummary)}
+        </Title>
 
-        <DescriptionList isHorizontal>
+        <DescriptionList isHorizontal columnModifier={{ default: '2Col' }}>
           <DescriptionListGroup>
             <DescriptionListTerm>{intl.formatMessage(messages.sourceType)}</DescriptionListTerm>
             <DescriptionListDescription>{sourceType?.product_name ?? source.source_type}</DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>
-            <DescriptionListTerm>{intl.formatMessage(messages.status)}</DescriptionListTerm>
+            <DescriptionListTerm>{intl.formatMessage(messages.lastAvailabilityCheck)}</DescriptionListTerm>
             <DescriptionListDescription>
-              <Label color={statusColor}>{statusLabel}</Label>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                {source.last_polling_time
+                  ? formatRelativeDate(source.last_polling_time)
+                  : intl.formatMessage(messages.waitingForUpdate)}
+                <Button
+                  variant="plain"
+                  aria-label={intl.formatMessage(messages.checkAvailability)}
+                  onClick={handleCheckAvailability}
+                  size="sm"
+                >
+                  <RedoIcon />
+                </Button>
+              </span>
             </DescriptionListDescription>
           </DescriptionListGroup>
           <DescriptionListGroup>

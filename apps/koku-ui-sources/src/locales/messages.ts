@@ -102,6 +102,18 @@ export default defineMessages({
     id: 'sources.checkAvailability',
     defaultMessage: 'Check source availability',
   },
+  sourceSummary: {
+    id: 'sources.sourceSummary',
+    defaultMessage: 'Source summary',
+  },
+  lastAvailabilityCheck: {
+    id: 'sources.lastAvailabilityCheck',
+    defaultMessage: 'Last availability check',
+  },
+  waitingForUpdate: {
+    id: 'sources.waitingForUpdate',
+    defaultMessage: 'Waiting for update',
+  },
   viewDetails: {
     id: 'sources.viewDetails',
     defaultMessage: 'View details',
