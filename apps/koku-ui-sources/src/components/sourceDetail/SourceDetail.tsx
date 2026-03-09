@@ -1,6 +1,5 @@
 import {
-  ActionList,
-  ActionListItem,
+  Alert,
   Breadcrumb,
   BreadcrumbItem,
   Bullseye,
@@ -9,12 +8,17 @@ import {
   DescriptionListDescription,
   DescriptionListGroup,
   DescriptionListTerm,
+  Dropdown,
+  DropdownItem,
+  DropdownList,
   Label,
+  MenuToggle,
   PageSection,
   Spinner,
   Title,
 } from '@patternfly/react-core';
-import { getSource } from 'api/entities';
+import { EllipsisVIcon } from '@patternfly/react-icons';
+import { getSource, pauseSource, resumeSource } from 'api/entities';
 import { getSourceTypeById } from 'api/sourceTypes';
 import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
 import { SourceRenameModal } from 'components/modals/SourceRenameModal';
@@ -22,6 +26,7 @@ import messages from 'locales/messages';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import type { Source } from 'typings/source';
+import { formatRelativeDate } from 'utilities/relativeDate';
 
 interface SourceDetailProps {
   uuid: string;
@@ -34,6 +39,7 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
   const [loading, setLoading] = useState(true);
   const [isRemoveOpen, setIsRemoveOpen] = useState(false);
   const [isRenameOpen, setIsRenameOpen] = useState(false);
+  const [isKebabOpen, setIsKebabOpen] = useState(false);
 
   const fetchSource = useCallback(async () => {
     if (!uuid) {
@@ -61,6 +67,24 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
   const handleRenameSuccess = useCallback(() => {
     fetchSource();
     setIsRenameOpen(false);
+  }, [fetchSource]);
+
+  const handleTogglePause = useCallback(async () => {
+    if (!source) return;
+    try {
+      if (source.paused) {
+        await resumeSource(source.uuid);
+      } else {
+        await pauseSource(source.uuid);
+      }
+      fetchSource();
+    } catch {
+      // TODO: error handling
+    }
+  }, [source, fetchSource]);
+
+  const handleCheckAvailability = useCallback(() => {
+    fetchSource();
   }, [fetchSource]);
 
   if (loading) {
@@ -102,21 +126,79 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
         </Breadcrumb>
       </PageSection>
       <PageSection>
-        <Title headingLevel="h1" style={{ marginBottom: '16px' }}>
-          {source.name}
-        </Title>
-        <ActionList style={{ marginBottom: '24px' }}>
-          <ActionListItem>
-            <Button variant="secondary" onClick={() => setIsRenameOpen(true)}>
-              {intl.formatMessage(messages.rename)}
-            </Button>
-          </ActionListItem>
-          <ActionListItem>
-            <Button variant="danger" onClick={() => setIsRemoveOpen(true)}>
-              {intl.formatMessage(messages.remove)}
-            </Button>
-          </ActionListItem>
-        </ActionList>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+              <Title headingLevel="h1">{source.name}</Title>
+              <Label color={statusColor}>{statusLabel}</Label>
+            </div>
+          </div>
+          <Dropdown
+            isOpen={isKebabOpen}
+            onOpenChange={setIsKebabOpen}
+            toggle={(toggleRef) => (
+              <MenuToggle
+                ref={toggleRef}
+                variant="plain"
+                onClick={() => setIsKebabOpen(!isKebabOpen)}
+                isExpanded={isKebabOpen}
+                aria-label="Actions"
+              >
+                <EllipsisVIcon />
+              </MenuToggle>
+            )}
+            popperProps={{ position: 'right' }}
+          >
+            <DropdownList>
+              <DropdownItem
+                onClick={() => {
+                  setIsKebabOpen(false);
+                  handleTogglePause();
+                }}
+              >
+                {source.paused ? intl.formatMessage(messages.resume) : intl.formatMessage(messages.pause)}
+              </DropdownItem>
+              <DropdownItem
+                onClick={() => {
+                  setIsKebabOpen(false);
+                  setIsRenameOpen(true);
+                }}
+              >
+                {intl.formatMessage(messages.rename)}
+              </DropdownItem>
+              <DropdownItem
+                onClick={() => {
+                  setIsKebabOpen(false);
+                  setIsRemoveOpen(true);
+                }}
+                isDanger
+              >
+                {intl.formatMessage(messages.remove)}
+              </DropdownItem>
+            </DropdownList>
+          </Dropdown>
+        </div>
+
+        {source.paused && (
+          <Alert
+            variant="warning"
+            isInline
+            title={intl.formatMessage(messages.sourcePaused)}
+            actionLinks={
+              <Button variant="link" isInline onClick={handleTogglePause}>
+                {intl.formatMessage(messages.resumeConnection)}
+              </Button>
+            }
+            style={{ marginBottom: '16px' }}
+          >
+            {intl.formatMessage(messages.sourcePausedBody)}
+          </Alert>
+        )}
+
+        <Button variant="secondary" onClick={handleCheckAvailability} style={{ marginBottom: '24px' }}>
+          {intl.formatMessage(messages.checkAvailability)}
+        </Button>
+
         <DescriptionList isHorizontal>
           <DescriptionListGroup>
             <DescriptionListTerm>{intl.formatMessage(messages.sourceType)}</DescriptionListTerm>
@@ -130,9 +212,7 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
           </DescriptionListGroup>
           <DescriptionListGroup>
             <DescriptionListTerm>{intl.formatMessage(messages.dateAdded)}</DescriptionListTerm>
-            <DescriptionListDescription>
-              {source.created_timestamp ? new Date(source.created_timestamp).toLocaleDateString() : '—'}
-            </DescriptionListDescription>
+            <DescriptionListDescription>{formatRelativeDate(source.created_timestamp)}</DescriptionListDescription>
           </DescriptionListGroup>
           {source.authentication?.credentials?.cluster_id && (
             <DescriptionListGroup>
