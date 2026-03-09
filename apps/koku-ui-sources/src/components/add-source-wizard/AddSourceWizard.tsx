@@ -1,5 +1,5 @@
 import FormRenderer from '@data-driven-forms/react-form-renderer/form-renderer';
-import { Alert, Modal, ModalBody, ModalHeader } from '@patternfly/react-core';
+import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@patternfly/react-core';
 import { createApplication, createSource, deleteSource } from 'api/entities';
 import componentMapper from 'components/pf6-ddf-mapper';
 import React, { useCallback, useState } from 'react';
@@ -30,6 +30,20 @@ const getWizardTitle = (preselectedType?: string): string => {
 
 const AddSourceWizard: React.FC<AddSourceWizardProps> = ({ isOpen, onClose, onSubmitSuccess, preselectedType }) => {
   const [error, setError] = useState<string | null>(null);
+  const [isCancelConfirmOpen, setIsCancelConfirmOpen] = useState(false);
+
+  const handleCancel = useCallback(() => {
+    setIsCancelConfirmOpen(true);
+  }, []);
+
+  const handleConfirmCancel = useCallback(() => {
+    setIsCancelConfirmOpen(false);
+    onClose();
+  }, [onClose]);
+
+  const handleDismissCancel = useCallback(() => {
+    setIsCancelConfirmOpen(false);
+  }, []);
 
   const handleSubmit = useCallback(
     async (values: Record<string, any>) => {
@@ -82,6 +96,7 @@ const AddSourceWizard: React.FC<AddSourceWizardProps> = ({ isOpen, onClose, onSu
   const initialValues = preselectedType ? { source_type: preselectedType } : {};
 
   return (
+    <>
     <Modal isOpen={isOpen} onClose={onClose} variant="large">
       <ModalHeader title={getWizardTitle(preselectedType)} />
       <ModalBody>
@@ -95,11 +110,29 @@ const AddSourceWizard: React.FC<AddSourceWizardProps> = ({ isOpen, onClose, onSu
           componentMapper={componentMapper}
           FormTemplate={FormTemplate}
           onSubmit={handleSubmit}
-          onCancel={onClose}
+          onCancel={handleCancel}
           initialValues={initialValues}
         />
       </ModalBody>
     </Modal>
+    <Modal
+      isOpen={isCancelConfirmOpen}
+      onClose={handleDismissCancel}
+      variant="small"
+      aria-label="Cancel confirmation"
+    >
+      <ModalHeader title="Exit source creation?" />
+      <ModalBody>All inputs will be discarded.</ModalBody>
+      <ModalFooter>
+        <Button variant="primary" onClick={handleConfirmCancel}>
+          Exit
+        </Button>
+        <Button variant="link" onClick={handleDismissCancel}>
+          Stay
+        </Button>
+      </ModalFooter>
+    </Modal>
+  </>
   );
 };
 

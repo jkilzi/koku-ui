@@ -7,6 +7,11 @@ export const sourceNameStep = {
   nextStep: ({ values }: any) => `credentials-${values.source_type}`,
   fields: [
     {
+      component: componentTypes.PLAIN_TEXT,
+      name: 'source-name-description',
+      label: 'Enter a name for your source.',
+    },
+    {
       component: componentTypes.TEXT_FIELD,
       name: 'source_name',
       label: 'Name',
