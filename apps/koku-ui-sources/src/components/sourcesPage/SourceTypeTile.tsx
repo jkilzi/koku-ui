@@ -14,7 +14,7 @@ const SourceTypeTile: React.FC<SourceTypeTileProps> = ({ sourceType, onClick }) 
   return (
     <Card isSelectable isClickable onClick={() => onClick(sourceType)}>
       <CardBody>
-        {Icon && <Icon style={{ width: 48, height: 48, marginBottom: '16px' }} />}
+        {Icon && <Icon size={48} style={{ marginBottom: '16px' }} />}
         <Title headingLevel="h3" size="lg">
           {sourceType.product_name}
         </Title>
