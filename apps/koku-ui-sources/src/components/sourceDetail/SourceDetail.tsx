@@ -41,6 +41,7 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
   const [isRemoveOpen, setIsRemoveOpen] = useState(false);
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [isKebabOpen, setIsKebabOpen] = useState(false);
+  const [checkingAvailability, setCheckingAvailability] = useState(false);
 
   const fetchSource = useCallback(async () => {
     if (!uuid) {
@@ -86,9 +87,20 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
     }
   }, [source, fetchSource]);
 
-  const handleCheckAvailability = useCallback(() => {
-    fetchSource();
-  }, [fetchSource]);
+  const handleCheckAvailability = useCallback(async () => {
+    if (!uuid) {
+      return;
+    }
+    setCheckingAvailability(true);
+    try {
+      const data = await getSource(uuid);
+      setSource(data);
+    } catch {
+      // status unchanged on failure
+    } finally {
+      setCheckingAvailability(false);
+    }
+  }, [uuid]);
 
   const handleSaveCredentials = useCallback(async (credentials: Record<string, string>) => {
     // TODO: implement credential update API call - credentials will be sent to API
@@ -223,10 +235,10 @@ const SourceDetail: React.FC<SourceDetailProps> = ({ uuid, onBack }) => {
                   variant="plain"
                   aria-label={intl.formatMessage(messages.checkAvailability)}
                   onClick={handleCheckAvailability}
+                  isDisabled={checkingAvailability}
                   size="sm"
-                >
-                  <RedoIcon />
-                </Button>
+                  icon={checkingAvailability ? <Spinner size="md" /> : <RedoIcon />}
+                />
               </span>
             </DescriptionListDescription>
           </DescriptionListGroup>
