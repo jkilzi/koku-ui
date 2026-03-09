@@ -19,7 +19,7 @@ const componentMapper = {
   [componentTypes.PLAIN_TEXT]: PlainText,
   [componentTypes.WIZARD]: Wizard,
   'card-select': CardSelect,
-  'description': Description,
+  description: Description,
   'review-summary': ReviewSummary,
   'ocp-instructions': OcpInstructions,
 };

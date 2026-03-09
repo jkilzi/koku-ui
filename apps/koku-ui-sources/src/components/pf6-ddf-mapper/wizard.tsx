@@ -6,11 +6,13 @@ import {
   ActionListItem,
   Button,
   ButtonVariant,
+  WizardBody,
   WizardFooterWrapper,
   WizardNav,
   WizardNavItem,
 } from '@patternfly/react-core';
 import { css } from '@patternfly/react-styles';
+import formStyles from '@patternfly/react-styles/css/components/Form/form';
 import styles from '@patternfly/react-styles/css/components/Wizard/wizard';
 import React, { useCallback, useContext, useMemo } from 'react';
 
@@ -92,14 +94,14 @@ const PF6WizardRenderer: React.FC<any> = () => {
             ))}
           </WizardNav>
           <main className={css(styles.wizardMain)}>
-            <div className={css(styles.wizardMainBody)}>
+            <WizardBody>
               <h2 className={css(styles.wizardTitleText)} style={{ marginBottom: '1rem' }}>
                 {currentStep.title || currentStep.name}
               </h2>
-              <div style={{ marginBottom: '24px' }}>
+              <div className={css(formStyles.form)}>
                 {currentStep.fields && formOptions.renderForm(currentStep.fields)}
               </div>
-            </div>
+            </WizardBody>
           </main>
         </div>
         <WizardFooterWrapper>
