@@ -27,6 +27,7 @@ export const buildWizardSchema = (preselectedType?: string) => {
       {
         component: componentTypes.WIZARD,
         name: 'add-source-wizard',
+        crossroads: ['source_type'],
         fields: steps,
       },
     ],

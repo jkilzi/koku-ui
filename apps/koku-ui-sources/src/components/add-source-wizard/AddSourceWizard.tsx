@@ -14,7 +14,7 @@ interface AddSourceWizardProps {
 }
 
 const FormTemplate: React.FC<any> = ({ formFields }) => {
-  return <>{formFields}</>;
+  return <form onSubmit={e => e.preventDefault()}>{formFields}</form>;
 };
 
 const getWizardTitle = (preselectedType?: string): string => {
