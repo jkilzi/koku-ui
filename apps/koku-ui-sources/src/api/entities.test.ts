@@ -8,6 +8,7 @@ import {
   pauseSource,
   resumeSource,
   createApplication,
+  findSourceByName,
 } from './entities';
 
 jest.mock('axios');
@@ -139,30 +140,30 @@ describe('entities API', () => {
   });
 
   describe('pauseSource', () => {
-    it('calls axios.patch with correct URL and paused: true', async () => {
-      const mockSource = { id: 1, uuid: 'uuid-1', name: 'Test', paused: true };
+    it('calls axios.patch with name, source_type, and paused: true', async () => {
+      const mockSource = { id: 1, uuid: 'uuid-1', name: 'Test', source_type: 'OCP', paused: true };
       mockedAxios.patch.mockResolvedValue({ data: mockSource });
 
-      const result = await pauseSource('uuid-1');
+      const result = await pauseSource({ uuid: 'uuid-1', name: 'Test', source_type: 'OCP' });
 
       expect(mockedAxios.patch).toHaveBeenCalledWith(
         '/api/cost-management/v1/sources/uuid-1/',
-        { paused: true }
+        { name: 'Test', source_type: 'OCP', paused: true }
       );
       expect(result).toEqual(mockSource);
     });
   });
 
   describe('resumeSource', () => {
-    it('calls axios.patch with correct URL and paused: false', async () => {
-      const mockSource = { id: 1, uuid: 'uuid-1', name: 'Test', paused: false };
+    it('calls axios.patch with name, source_type, and paused: false', async () => {
+      const mockSource = { id: 1, uuid: 'uuid-1', name: 'Test', source_type: 'OCP', paused: false };
       mockedAxios.patch.mockResolvedValue({ data: mockSource });
 
-      const result = await resumeSource('uuid-1');
+      const result = await resumeSource({ uuid: 'uuid-1', name: 'Test', source_type: 'OCP' });
 
       expect(mockedAxios.patch).toHaveBeenCalledWith(
         '/api/cost-management/v1/sources/uuid-1/',
-        { paused: false }
+        { name: 'Test', source_type: 'OCP', paused: false }
       );
       expect(result).toEqual(mockSource);
     });
@@ -185,6 +186,23 @@ describe('entities API', () => {
         createData
       );
       expect(result).toEqual(mockApplication);
+    });
+  });
+
+  describe('findSourceByName', () => {
+    it('calls listSources with the name param', async () => {
+      const mockResponse = {
+        data: [],
+        meta: { count: 0 },
+        links: { first: '', next: null, previous: null, last: '' },
+      };
+      mockedAxios.get.mockResolvedValue({ data: mockResponse });
+
+      await findSourceByName('test-name');
+
+      expect(mockedAxios.get).toHaveBeenCalledWith('/api/cost-management/v1/sources/', {
+        params: { name: 'test-name' },
+      });
     });
   });
 });

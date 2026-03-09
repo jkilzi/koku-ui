@@ -31,12 +31,16 @@ export const deleteSource = (uuid: string): Promise<void> => {
   return axios.delete(`${SOURCES_PATH}/${uuid}/`);
 };
 
-export const pauseSource = (uuid: string): Promise<Source> => {
-  return axios.patch(`${SOURCES_PATH}/${uuid}/`, { paused: true }).then(res => res.data);
+export const pauseSource = (source: Pick<Source, 'uuid' | 'name' | 'source_type'>): Promise<Source> => {
+  return axios
+    .patch(`${SOURCES_PATH}/${source.uuid}/`, { name: source.name, source_type: source.source_type, paused: true })
+    .then(res => res.data);
 };
 
-export const resumeSource = (uuid: string): Promise<Source> => {
-  return axios.patch(`${SOURCES_PATH}/${uuid}/`, { paused: false }).then(res => res.data);
+export const resumeSource = (source: Pick<Source, 'uuid' | 'name' | 'source_type'>): Promise<Source> => {
+  return axios
+    .patch(`${SOURCES_PATH}/${source.uuid}/`, { name: source.name, source_type: source.source_type, paused: false })
+    .then(res => res.data);
 };
 
 export const createApplication = (data: {
@@ -50,3 +54,6 @@ export const createApplication = (data: {
 export const deleteApplication = (id: number): Promise<void> => {
   return axios.delete(`${APPLICATIONS_PATH}/${id}/`);
 };
+
+export const findSourceByName = (name: string): Promise<SourcesListResponse> =>
+  listSources({ name });
