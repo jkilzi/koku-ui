@@ -1,7 +1,7 @@
+import { pauseSource, resumeSource } from 'api/entities';
 import { Bullseye, PageSection, Spinner } from '@patternfly/react-core';
 import { AddSourceWizard } from 'components/add-source-wizard/AddSourceWizard';
 import { SourceRemoveModal } from 'components/modals/SourceRemoveModal';
-import { SourceRenameModal } from 'components/modals/SourceRenameModal';
 import { SourceDetail } from 'components/sourceDetail/SourceDetail';
 import { SourcesTable } from 'components/sourcesTable/SourcesTable';
 import { SourcesToolbar } from 'components/sourcesTable/SourcesToolbar';
@@ -23,7 +23,6 @@ const SourcesPage: React.FC = () => {
   const [currentView, setCurrentView] = useState<ViewState>({ type: 'list' });
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [preselectedType, setPreselectedType] = useState<string | undefined>();
-  const [renameSource, setRenameSource] = useState<Source | null>(null);
   const [removeSource, setRemoveSource] = useState<Source | null>(null);
 
   useEffect(() => {
@@ -84,18 +83,25 @@ const SourcesPage: React.FC = () => {
     setCurrentView({ type: 'detail', uuid: source.uuid });
   }, []);
 
-  const handleRename = useCallback((source: Source) => {
-    setRenameSource(source);
-  }, []);
+  const handleTogglePause = useCallback(
+    async (source: Source) => {
+      try {
+        if (source.paused) {
+          await resumeSource(source.uuid);
+        } else {
+          await pauseSource(source.uuid);
+        }
+        dispatch(loadEntities());
+      } catch {
+        // TODO: add error notification
+      }
+    },
+    [dispatch]
+  );
 
   const handleRemove = useCallback((source: Source) => {
     setRemoveSource(source);
   }, []);
-
-  const handleRenameSuccess = useCallback(() => {
-    dispatch(loadEntities());
-    setRenameSource(null);
-  }, [dispatch]);
 
   const handleRemoveSuccess = useCallback(() => {
     dispatch(loadEntities());
@@ -136,8 +142,8 @@ const SourcesPage: React.FC = () => {
         <SourcesTable
           sources={entities}
           onSelectSource={handleSelectSource}
-          onRename={handleRename}
           onRemove={handleRemove}
+          onTogglePause={handleTogglePause}
           sortBy={sortBy}
           sortDirection={sortDirection}
           onSort={handleSort}
@@ -159,14 +165,6 @@ const SourcesPage: React.FC = () => {
         onSubmitSuccess={handleWizardSuccess}
         preselectedType={preselectedType}
       />
-      {renameSource && (
-        <SourceRenameModal
-          isOpen
-          source={renameSource}
-          onClose={() => setRenameSource(null)}
-          onSuccess={handleRenameSuccess}
-        />
-      )}
       {removeSource && (
         <SourceRemoveModal
           isOpen

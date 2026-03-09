@@ -12,6 +12,8 @@ jest.mock('api/entities', () => ({
   createSource: jest.fn(),
   updateSource: jest.fn(),
   deleteSource: jest.fn(),
+  pauseSource: jest.fn(),
+  resumeSource: jest.fn(),
   createApplication: jest.fn(),
   deleteApplication: jest.fn(),
 }));

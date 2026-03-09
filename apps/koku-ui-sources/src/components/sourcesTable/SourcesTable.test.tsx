@@ -45,8 +45,8 @@ const renderWithIntl = (sources: Source[], props: Partial<Parameters<typeof Sour
   const defaultProps = {
     sources,
     onSelectSource: jest.fn(),
-    onRename: jest.fn(),
     onRemove: jest.fn(),
+    onTogglePause: jest.fn(),
     sortBy: 'name',
     sortDirection: 'asc' as const,
     onSort: jest.fn(),
@@ -103,11 +103,11 @@ describe('SourcesTable', () => {
   it('renders actions kebab menu', async () => {
     const user = userEvent.setup();
     const onSelectSource = jest.fn();
-    const onRename = jest.fn();
+    const onTogglePause = jest.fn();
     const onRemove = jest.fn();
     renderWithIntl(mockSources, {
       onSelectSource,
-      onRename,
+      onTogglePause,
       onRemove,
     });
 
@@ -117,7 +117,7 @@ describe('SourcesTable', () => {
     await user.click(kebabButtons[0]);
 
     expect(screen.getByText('View details')).toBeInTheDocument();
-    expect(screen.getByText('Rename')).toBeInTheDocument();
+    expect(screen.getByText('Pause')).toBeInTheDocument();
     expect(screen.getByText('Remove')).toBeInTheDocument();
   });
 });

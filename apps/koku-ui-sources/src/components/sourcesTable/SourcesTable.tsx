@@ -10,8 +10,8 @@ import { formatRelativeDate } from 'utilities/relativeDate';
 interface SourcesTableProps {
   sources: Source[];
   onSelectSource: (source: Source) => void;
-  onRename: (source: Source) => void;
   onRemove: (source: Source) => void;
+  onTogglePause: (source: Source) => void;
   sortBy: string;
   sortDirection: 'asc' | 'desc';
   onSort: (sortBy: string, direction: 'asc' | 'desc') => void;
@@ -34,8 +34,8 @@ const columnFields = ['name', 'source_type', 'created_timestamp'];
 const SourcesTable: React.FC<SourcesTableProps> = ({
   sources,
   onSelectSource,
-  onRename,
   onRemove,
+  onTogglePause,
   sortBy,
   sortDirection,
   onSort,
@@ -99,17 +99,23 @@ const SourcesTable: React.FC<SourcesTableProps> = ({
                 <ActionsColumn
                   items={[
                     {
-                      title: intl.formatMessage(messages.viewDetails),
-                      onClick: () => onSelectSource(source),
-                    },
-                    {
-                      title: intl.formatMessage(messages.rename),
-                      onClick: () => onRename(source),
+                      title: source.paused
+                        ? intl.formatMessage(messages.resume)
+                        : intl.formatMessage(messages.pause),
+                      description: source.paused
+                        ? intl.formatMessage(messages.resumeDescription)
+                        : intl.formatMessage(messages.pauseDescription),
+                      onClick: () => onTogglePause(source),
                     },
                     {
                       title: intl.formatMessage(messages.remove),
+                      description: intl.formatMessage(messages.removeDescription),
                       onClick: () => onRemove(source),
                       isDanger: true,
+                    },
+                    {
+                      title: intl.formatMessage(messages.viewDetails),
+                      onClick: () => onSelectSource(source),
                     },
                   ]}
                 />
