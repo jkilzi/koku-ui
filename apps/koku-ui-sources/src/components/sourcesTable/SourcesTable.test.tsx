@@ -120,4 +120,51 @@ describe('SourcesTable', () => {
     expect(screen.getByText('Pause')).toBeInTheDocument();
     expect(screen.getByText('Remove')).toBeInTheDocument();
   });
+
+  it('calls onTogglePause when Pause action is clicked', async () => {
+    const user = userEvent.setup();
+    const onTogglePause = jest.fn();
+    renderWithIntl(mockSources, { onTogglePause });
+
+    const kebabButtons = screen.getAllByRole('button', { name: 'Kebab toggle' });
+    await user.click(kebabButtons[0]);
+    await user.click(screen.getByText('Pause'));
+
+    expect(onTogglePause).toHaveBeenCalledWith(mockSources[0]);
+  });
+
+  it('calls onRemove when Remove action is clicked', async () => {
+    const user = userEvent.setup();
+    const onRemove = jest.fn();
+    renderWithIntl(mockSources, { onRemove });
+
+    const kebabButtons = screen.getAllByRole('button', { name: 'Kebab toggle' });
+    await user.click(kebabButtons[0]);
+    await user.click(screen.getByText('Remove'));
+
+    expect(onRemove).toHaveBeenCalledWith(mockSources[0]);
+  });
+
+  it('shows Resume instead of Pause for a paused source', async () => {
+    const user = userEvent.setup();
+    renderWithIntl([mockSources[1]]);
+
+    const kebabButtons = screen.getAllByRole('button', { name: 'Kebab toggle' });
+    await user.click(kebabButtons[0]);
+
+    expect(screen.getByText('Resume')).toBeInTheDocument();
+    expect(screen.queryByText('Pause')).not.toBeInTheDocument();
+  });
+
+  it('calls onTogglePause when Resume action is clicked for a paused source', async () => {
+    const user = userEvent.setup();
+    const onTogglePause = jest.fn();
+    renderWithIntl([mockSources[1]], { onTogglePause });
+
+    const kebabButtons = screen.getAllByRole('button', { name: 'Kebab toggle' });
+    await user.click(kebabButtons[0]);
+    await user.click(screen.getByText('Resume'));
+
+    expect(onTogglePause).toHaveBeenCalledWith(mockSources[1]);
+  });
 });
