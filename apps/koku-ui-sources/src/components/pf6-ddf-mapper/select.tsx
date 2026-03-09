@@ -1,5 +1,5 @@
 import useFieldApi from '@data-driven-forms/react-form-renderer/use-field-api';
-import { FormGroup, MenuToggle, Select as PFSelect, SelectList, SelectOption } from '@patternfly/react-core';
+import { FormGroup, FormHelperText, HelperText, HelperTextItem, MenuToggle, Select as PFSelect, SelectList, SelectOption } from '@patternfly/react-core';
 import React, { useState } from 'react';
 
 const Select: React.FC<any> = props => {
@@ -41,7 +41,11 @@ const Select: React.FC<any> = props => {
           ))}
         </SelectList>
       </PFSelect>
-      {isError && <div style={{ color: 'var(--pf-t--global--color--status--danger--default)' }}>{meta.error}</div>}
+      <FormHelperText>
+        <HelperText>
+          {isError && <HelperTextItem variant="error">{meta.error}</HelperTextItem>}
+        </HelperText>
+      </FormHelperText>
     </FormGroup>
   );
 };
