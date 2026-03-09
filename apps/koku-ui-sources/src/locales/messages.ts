@@ -7,11 +7,11 @@ export default defineMessages({
   },
   emptyStateTitle: {
     id: 'sources.emptyStateTitle',
-    defaultMessage: 'No sources',
+    defaultMessage: 'Get started by connecting your sources',
   },
   emptyStateBody: {
     id: 'sources.emptyStateBody',
-    defaultMessage: 'Add a source to get started with cost management.',
+    defaultMessage: 'Select an available provider.',
   },
   filterByName: {
     id: 'sources.filterByName',

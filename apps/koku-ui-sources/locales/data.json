@@ -1,8 +1,8 @@
 {
   "en": {
     "sources.addSource": "Add source",
-    "sources.emptyStateTitle": "No sources",
-    "sources.emptyStateBody": "Add a source to get started with cost management.",
+    "sources.emptyStateTitle": "Get started by connecting your sources",
+    "sources.emptyStateBody": "Select an available provider.",
     "sources.filterByName": "Filter by name",
     "sources.filterByType": "Filter by type",
     "sources.filterByStatus": "Filter by status",

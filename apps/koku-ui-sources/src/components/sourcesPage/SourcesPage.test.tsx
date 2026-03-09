@@ -73,10 +73,8 @@ describe('SourcesPage', () => {
       renderWithProviders();
     });
 
-    expect(screen.getByText('No sources')).toBeInTheDocument();
-    expect(
-      screen.getByText('Add a source to get started with cost management.')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Get started by connecting your sources')).toBeInTheDocument();
+    expect(screen.getByText('Select an available provider.')).toBeInTheDocument();
   });
 
   it('shows table when entities exist', () => {
