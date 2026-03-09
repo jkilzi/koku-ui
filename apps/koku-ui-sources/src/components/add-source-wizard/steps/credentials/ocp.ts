@@ -3,14 +3,17 @@ import validatorTypes from '@data-driven-forms/react-form-renderer/validator-typ
 
 export const ocpCredentialsStep = {
   name: 'credentials-OCP',
-  title: 'OpenShift credentials',
+  title: 'Install and configure operator',
   nextStep: 'review',
   fields: [
     {
+      component: 'ocp-instructions',
+      name: 'ocp-instructions-text',
+    },
+    {
       component: componentTypes.TEXT_FIELD,
       name: 'credentials.cluster_id',
-      label: 'Cluster identifier',
-      helperText: 'Enter the cluster ID from the Cost Management Metrics Operator status.',
+      label: 'Cluster Identifier',
       isRequired: true,
       validate: [{ type: validatorTypes.REQUIRED }],
     },
