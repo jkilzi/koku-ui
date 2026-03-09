@@ -90,7 +90,7 @@ const SourcesToolbar: React.FC<SourcesToolbarProps> = ({
             onClear={handleFilterClear}
           />
         </ToolbarItem>
-        <ToolbarGroup align={{ default: 'alignEnd' }}>
+        <ToolbarGroup align={{ default: 'alignStart' }}>
           <ToolbarItem>
             <Button variant="primary" onClick={onAddSource}>
               {intl.formatMessage(messages.addSource)}

@@ -84,7 +84,7 @@ const SourcesTable: React.FC<SourcesTableProps> = ({
         {sources.map(source => {
           const sourceType = getSourceTypeById(source.source_type);
           return (
-            <Tr key={source.uuid} isClickable onRowClick={() => onSelectSource(source)}>
+            <Tr key={source.uuid}>
               <Td dataLabel={intl.formatMessage(messages.name)}>
                 <Button variant="link" isInline onClick={() => onSelectSource(source)}>
                   {source.name}

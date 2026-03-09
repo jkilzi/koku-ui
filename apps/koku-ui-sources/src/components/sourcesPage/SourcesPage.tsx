@@ -87,9 +87,9 @@ const SourcesPage: React.FC = () => {
     async (source: Source) => {
       try {
         if (source.paused) {
-          await resumeSource(source.uuid);
+          await resumeSource(source);
         } else {
-          await pauseSource(source.uuid);
+          await pauseSource(source);
         }
         dispatch(loadEntities());
       } catch {
