@@ -1,4 +1,7 @@
 import { SOURCE_TYPES } from 'api/sourceTypes';
+import { sourceTypeIconMap } from 'components/sourcesPage/sourceTypeIcons';
+
+const iconMapper = (value: string) => sourceTypeIconMap[value] ?? null;
 
 export const selectTypeStep = {
   name: 'select-type',
@@ -10,10 +13,10 @@ export const selectTypeStep = {
       name: 'source_type',
       label: 'Select a source type',
       isRequired: true,
+      iconMapper,
       options: SOURCE_TYPES.map(st => ({
         value: st.id,
         label: st.product_name,
-        description: st.category,
       })),
       validate: [{ type: 'required' }],
     },
