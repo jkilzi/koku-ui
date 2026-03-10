@@ -1,4 +1,4 @@
-import { EmptyState, EmptyStateBody, Gallery, GalleryItem } from '@patternfly/react-core';
+import { EmptyState, EmptyStateBody, Grid, GridItem } from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { SOURCE_TYPES } from 'api/sourceTypes';
 import messages from 'locales/messages';
@@ -20,13 +20,13 @@ const SourcesEmptyState: React.FC<SourcesEmptyStateProps> = ({ onSelectType }) =
       <EmptyState icon={PlusCircleIcon} titleText={intl.formatMessage(messages.emptyStateTitle)}>
         <EmptyStateBody>{intl.formatMessage(messages.emptyStateBody)}</EmptyStateBody>
       </EmptyState>
-      <Gallery hasGutter minWidths={{ default: '200px' }} style={{ padding: '24px' }}>
+      <Grid hasGutter style={{ padding: '24px' }}>
         {SOURCE_TYPES.map(sourceType => (
-          <GalleryItem key={sourceType.id}>
+          <GridItem key={sourceType.id} span={6}>
             <SourceTypeTile sourceType={sourceType} onClick={onSelectType} />
-          </GalleryItem>
+          </GridItem>
         ))}
-      </Gallery>
+      </Grid>
     </>
   );
 };
