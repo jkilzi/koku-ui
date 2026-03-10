@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './api';
 import {
   listSources,
   getSource,
@@ -11,7 +11,7 @@ import {
   findSourceByName,
 } from './entities';
 
-jest.mock('axios');
+jest.mock('./api');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 describe('entities API', () => {

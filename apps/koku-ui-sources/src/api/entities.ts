@@ -1,6 +1,6 @@
-import axios from 'axios';
 import type { Application, Source, SourcesListResponse } from 'typings/source';
 
+import axios from './api';
 import { APPLICATIONS_PATH, SOURCES_PATH } from './constants';
 
 interface ListSourcesParams {
@@ -55,5 +55,4 @@ export const deleteApplication = (id: number): Promise<void> => {
   return axios.delete(`${APPLICATIONS_PATH}/${id}/`);
 };
 
-export const findSourceByName = (name: string): Promise<SourcesListResponse> =>
-  listSources({ name });
+export const findSourceByName = (name: string): Promise<SourcesListResponse> => listSources({ name });
