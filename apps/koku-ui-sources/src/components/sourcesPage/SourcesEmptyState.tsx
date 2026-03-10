@@ -20,9 +20,9 @@ const SourcesEmptyState: React.FC<SourcesEmptyStateProps> = ({ onSelectType }) =
       <EmptyState icon={PlusCircleIcon} titleText={intl.formatMessage(messages.emptyStateTitle)}>
         <EmptyStateBody>{intl.formatMessage(messages.emptyStateBody)}</EmptyStateBody>
       </EmptyState>
-      <Grid hasGutter style={{ padding: '24px' }}>
+      <Grid hasGutter span={6} className="pf-v6-u-m-auto" style={{ width: '48rem' }}>
         {SOURCE_TYPES.map(sourceType => (
-          <GridItem key={sourceType.id} span={6}>
+          <GridItem key={sourceType.id}>
             <SourceTypeTile sourceType={sourceType} onClick={onSelectType} />
           </GridItem>
         ))}

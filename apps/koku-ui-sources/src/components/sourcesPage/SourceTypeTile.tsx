@@ -22,7 +22,7 @@ const SourceTypeTile: React.FC<SourceTypeTileProps> = ({ sourceType, onClick }) 
       />
       <CardBody style={{ textAlign: 'center' }}>
         {Icon && <Icon style={{ width: 40, height: 40, marginBottom: 'var(--pf-t--global--spacer--md)' }} />}
-        <Title headingLevel="h3" size="lg">
+        <Title headingLevel="h3" size="md">
           {sourceType.product_name}
         </Title>
       </CardBody>
